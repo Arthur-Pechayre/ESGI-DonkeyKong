@@ -6,18 +6,18 @@
 const float Game::PlayerSpeed = 100.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
-Game::Game()
-	: mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close)
-	, mTexture()
-	, mPlayer()
-	, mFont()
-	, mStatisticsText()
-	, mStatisticsUpdateTime()
-	, mStatisticsNumFrames(0)
-	, mIsMovingUp(false)
-	, mIsMovingDown(false)
-	, mIsMovingRight(false)
-	, mIsMovingLeft(false)
+Game::Game():
+    mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close),
+    mTexture(),
+    mPlayer(),
+    mFont(),
+    mStatisticsText(),
+    mStatisticsUpdateTime(),
+    mStatisticsNumFrames(0),
+    mIsMovingUp(false),
+    mIsMovingDown(false),
+    mIsMovingRight(false),
+    mIsMovingLeft(false)
 {
 	mWindow.setFramerateLimit(160);
 
