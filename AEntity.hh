@@ -3,6 +3,7 @@ class AEntity
 {
 public:
     AEntity(size_t x, size_t y, char d);
+    AEntity();
     virtual ~AEntity() = 0;
     //virtual void move() = 0;
     void setX(size_t x);

@@ -13,11 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Entity">
-      <UniqueIdentifier>{e5d734f3-b64d-4314-9833-7f19e268f014}</UniqueIdentifier>
+    <Filter Include="Header Files\Map">
+      <UniqueIdentifier>{9a7d14ba-30d5-4cf3-a0ad-b3100e86eb9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Entity">
-      <UniqueIdentifier>{915b7d0b-129f-40b0-b83b-a95868ccdd0b}</UniqueIdentifier>
+    <Filter Include="Source Files\Map">
+      <UniqueIdentifier>{e4ebf961-12c5-4b70-98da-42f6f8e08719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Block">
+      <UniqueIdentifier>{8ac1729d-5876-4dde-9586-6d5be6409e63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Block">
+      <UniqueIdentifier>{11cff8bc-06a8-48fc-96ff-3954093e6f7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,11 +42,17 @@
     <ClInclude Include="EntityManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AEntity.hh">
-      <Filter>Header Files\Entity</Filter>
+    <ClInclude Include="Map.hh">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="Player.hh">
-      <Filter>Header Files\Entity</Filter>
+    <ClInclude Include="ABlock.hh">
+      <Filter>Header Files\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockGenerator.hpp">
+      <Filter>Header Files\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="StoneBlock.hh">
+      <Filter>Header Files\Block</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,11 +74,14 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AEntity.cpp">
-      <Filter>Source Files\Entity</Filter>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Entity</Filter>
+    <ClCompile Include="ABlock.cpp">
+      <Filter>Source Files\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="StoneBlock.cpp">
+      <Filter>Source Files\Block</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

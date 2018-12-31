@@ -5,6 +5,10 @@ AEntity::AEntity(size_t x, size_t y, char d)
 {
 }
 
+AEntity::AEntity()
+{
+}
+
 AEntity::~AEntity()
 {
 }

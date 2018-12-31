@@ -161,14 +161,10 @@ void Game::render()
 {
 	mWindow.clear();
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
-	{
-		if (entity->m_enabled == false)
-		{
-			continue;
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities) {
+		if (entity->m_enabled) {
+            mWindow.draw(entity->m_sprite);
 		}
-
-		mWindow.draw(entity->m_sprite);
 	}
 
 	mWindow.draw(mStatisticsText);
