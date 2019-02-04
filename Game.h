@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Entity.h"
+
 #define ECHELLE_COUNT 4
 #define BLOCK_COUNT_X 8
 #define BLOCK_COUNT_Y 5
@@ -19,23 +21,25 @@ private:
 
 	void updateStatistics(sf::Time elapsedTime);
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+    std::shared_ptr<Entity> getPlayerFirstCollision(int entityType);
+    bool grounded();
 
 private:
 	static const float		PlayerSpeed;
 	static const sf::Time	TimePerFrame;
 
 	sf::RenderWindow		mWindow;
-	sf::Texture	mTexture;
-	sf::Sprite	mPlayer;
-	sf::Font	mFont;
-	sf::Text	mStatisticsText;
-	sf::Time	mStatisticsUpdateTime;
+	sf::Texture	            mTexture;
+    std::shared_ptr<Entity>	mPlayer;
+	sf::Font	            mFont;
+	sf::Text	            mStatisticsText;
+	sf::Time	            mStatisticsUpdateTime;
 
-	std::size_t	mStatisticsNumFrames;
-	bool mIsMovingUp;
-	bool mIsMovingDown;
-	bool mIsMovingRight;
-	bool mIsMovingLeft;
+	std::size_t	    mStatisticsNumFrames;
+	bool            mIsMovingUp;
+	bool            mIsMovingDown;
+	bool            mIsMovingRight;
+	bool            mIsMovingLeft;
 
 	sf::Texture	_TextureEchelle;
 	sf::Sprite	_Echelle[ECHELLE_COUNT];
@@ -46,4 +50,3 @@ private:
 	sf::Vector2u _sizeBlock;
 	sf::Vector2u _sizeMario;
 };
-

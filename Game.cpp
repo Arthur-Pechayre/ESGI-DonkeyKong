@@ -63,19 +63,17 @@ Game::Game():
 
 	mTexture.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
 	_sizeMario = mTexture.getSize();
-	mPlayer.setTexture(mTexture);
 	sf::Vector2f posMario;
 	posMario.x = 100.f + 70.f;
 	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
 
-	mPlayer.setPosition(posMario);
-
 	std::shared_ptr<Entity> player = std::make_shared<Entity>();
-	player->m_sprite = mPlayer;
+	player->m_sprite.setTexture(mTexture);
 	player->m_type = EntityType::player;
 	player->m_size = mTexture.getSize();
-	player->m_position = mPlayer.getPosition();
+	player->m_position = posMario;
 	EntityManager::m_Entities.push_back(player);
+    mPlayer = player;
 
 	// Draw Statistic Font 
 
@@ -132,29 +130,24 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
 	sf::Vector2f movement(0.f, 0.f);
-	if (mIsMovingUp)
-		movement.y -= PlayerSpeed;
-	if (mIsMovingDown)
-		movement.y += PlayerSpeed;
-	if (mIsMovingLeft)
-		movement.x -= PlayerSpeed;
-	if (mIsMovingRight)
-		movement.x += PlayerSpeed;
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
-	{
-		if (entity->m_enabled == false)
-		{
-			continue;
-		}
+    if (mIsMovingUp && getPlayerFirstCollision(EntityType::echelle)) {
+        movement.y -= PlayerSpeed + 50.0f;
+    }
+    if (!grounded()) {
+        movement.y += 50.0f;
+        if (mIsMovingDown) {
+            movement.y += PlayerSpeed;
+        }
+    }
+    if (mIsMovingLeft) {
+        movement.x -= PlayerSpeed;
+    }	
+    if (mIsMovingRight) {
+        movement.x += PlayerSpeed;
+    }
 
-		if (entity->m_type != EntityType::player)
-		{
-			continue;
-		}
-
-		entity->m_sprite.move(movement * elapsedTime.asSeconds());
-	}
+	mPlayer->m_sprite.move(movement * elapsedTime.asSeconds());
 }
 
 void Game::render()
@@ -180,20 +173,56 @@ void Game::updateStatistics(sf::Time elapsedTime)
 	{
 		mStatisticsText.setString(
 			"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
-			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us");
+			"Time / Update = " + toString(mStatisticsUpdateTime.asMilliseconds() / mStatisticsNumFrames) + "ms"
+        );
 
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
 	}
 
-	//
-	// Handle collision
-	//
+    grounded();
 
-	if (mStatisticsUpdateTime >= sf::seconds(0.050f))
+    if (mStatisticsUpdateTime >= sf::seconds(0.050f))
 	{
+        
 		// Handle collision weapon enemies
 	}
+}
+
+bool Game::grounded() {
+    auto playerShape = mPlayer->m_sprite.getGlobalBounds();
+    float feetX = playerShape.left + playerShape.width / 2;
+    float feetY = playerShape.top + playerShape.height;
+
+    sf::CircleShape circle(1);
+    circle.setOutlineColor(sf::Color::Red);
+    circle.setOutlineThickness(1);
+    circle.setPosition(feetX - 1, feetY - 6);
+
+    for (auto e : EntityManager::m_Entities) {
+        auto eShape = e->m_sprite.getGlobalBounds();
+
+        if (e->m_type == EntityType::block && eShape.intersects(circle.getGlobalBounds())) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+std::shared_ptr<Entity> Game::getPlayerFirstCollision(int entityType = -1)
+{
+    auto playerShape = mPlayer->m_sprite.getGlobalBounds();
+
+    for (auto e : EntityManager::m_Entities) {
+        auto eShape = e->m_sprite.getGlobalBounds();
+
+        if ((e->m_type == entityType || entityType == -1) && eShape.intersects(playerShape)) {
+            return e;
+        }
+    }
+
+    return nullptr;
 }
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)

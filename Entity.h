@@ -2,7 +2,7 @@
 
 enum EntityType
 {
-	player,
+	player = 0,
 	block,
 	echelle
 };
@@ -18,10 +18,4 @@ public:
 	sf::Vector2u m_size;
 	sf::Vector2f m_position;
 	EntityType m_type;
-	bool m_enabled = true;
-
-	// Enemy only
-	bool m_bLeftToRight = true;
-	int m_times = 0;
 };
-
