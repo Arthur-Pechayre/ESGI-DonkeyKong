@@ -1,10 +1,17 @@
 #include "pch.h"
 #include "Player.h"
 
-Player::Player()
+const float Player::MAX_X_SPEED = 100.0f;
+const float Player::MAX_Y_SPEED = 120.0f;
+const int Player::FACING_RIGHT = 1;
+const int Player::FACING_LEFT = -1;
+
+Player::Player() :
+_facingChanged(false)
 {
     sf::CircleShape circle(1);
     _feetHitBox = circle;
+    _facing = FACING_RIGHT;
     this->updateHitboxes();
 }
 
@@ -16,7 +23,6 @@ bool Player::grounded(std::vector<std::shared_ptr<Entity>> blocks)
 {
     for (auto block : blocks) {
         if (block->m_type == EntityType::block && block->m_sprite.getGlobalBounds().intersects(_feetHitBox.getGlobalBounds())) {
-
             return true;
         }
     }

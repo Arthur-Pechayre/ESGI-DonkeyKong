@@ -4,6 +4,7 @@
 #include "EntityManager.h"
 
 const float Game::PlayerSpeed = 100.f;
+const float Game::GRAVITY = 100.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game():
@@ -72,7 +73,8 @@ Game::Game():
 	player->m_type = EntityType::player;
 	player->m_size = mTexture.getSize();
 	player->m_position = posMario;
-	EntityManager::m_Entities.push_back(player);
+    player->_facing = 1;
+	//EntityManager::m_Entities.push_back(player);
     mPlayer = player;
 
 	// Draw Statistic Font 
@@ -132,11 +134,11 @@ void Game::update(sf::Time elapsedTime)
 	sf::Vector2f movement(0.f, 0.f);
 
     if (mIsMovingUp && getPlayerFirstCollision(EntityType::echelle)) {
-        movement.y -= PlayerSpeed + 50.0f;
+        movement.y -= PlayerSpeed + Game::GRAVITY;
     }
-    printf("%d\n", mPlayer->grounded(EntityManager::m_Entities));
+
     if (!mPlayer->grounded(EntityManager::m_Entities)) {
-        movement.y += 50.0f;
+        movement.y += Game::GRAVITY;
         if (mIsMovingDown) {
             movement.y += PlayerSpeed;
         }
@@ -147,7 +149,21 @@ void Game::update(sf::Time elapsedTime)
     if (mIsMovingRight) {
         movement.x += PlayerSpeed;
     }
-
+    // Normalisation vecteurs
+    if (movement.x > 0) {
+        movement.x = movement.x > Player::MAX_X_SPEED ? Player::MAX_X_SPEED : movement.x;
+    } else {
+        movement.x = movement.x < -Player::MAX_X_SPEED ? -Player::MAX_X_SPEED : movement.x;
+    }
+    if (movement.y > 0) {
+        movement.y = movement.y > Player::MAX_Y_SPEED ? Player::MAX_Y_SPEED : movement.y;
+    } else {
+        movement.y = movement.y < -Player::MAX_Y_SPEED ? -Player::MAX_Y_SPEED : movement.y;
+    }
+    
+    int prevFacing = mPlayer->_facing;
+    mPlayer->_facing = movement.x == 0 ? mPlayer->_facing : movement.x > 1 ? 1 : -1;
+    mPlayer->_facingChanged = prevFacing != mPlayer->_facing;
 	mPlayer->m_sprite.move(movement * elapsedTime.asSeconds());
     mPlayer->updateHitboxes();
 }
@@ -159,9 +175,19 @@ void Game::render()
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities) {
         mWindow.draw(entity->m_sprite);
 	}
-    mWindow.draw(mPlayer->m_sprite);
 
-    mWindow.draw(mcircle);
+    printf("Facing : %d | Changed : %d\n", mPlayer->_facing, mPlayer->_facingChanged);
+
+    if (mPlayer->_facingChanged) {
+        sf::Vector2f movement(0.f, 0.f);
+
+        movement.x += mPlayer->_facing * -mPlayer->m_sprite.getGlobalBounds().width;
+        mPlayer->m_sprite.move(movement);
+        mPlayer->_facingChanged = false;
+        mPlayer->m_sprite.scale(-1, 1);
+
+    }
+    mWindow.draw(mPlayer->m_sprite);
 
 	mWindow.draw(mStatisticsText);
 	mWindow.display();

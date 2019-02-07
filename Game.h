@@ -27,14 +27,14 @@ private:
 private:
 	static const float		PlayerSpeed;
 	static const sf::Time	TimePerFrame;
+    static const float      GRAVITY;
 
 	sf::RenderWindow		mWindow;
 	sf::Texture	            mTexture;
     std::shared_ptr<Player>	mPlayer;
 	sf::Font	            mFont;
 	sf::Text	            mStatisticsText;
-	sf::Time	            mStatisticsUpdateTime;
-    sf::CircleShape         mcircle;
+    sf::Time	            mStatisticsUpdateTime;
 
 	std::size_t	    mStatisticsNumFrames;
 	bool            mIsMovingUp;
