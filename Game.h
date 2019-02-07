@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "Player.h"
 
 #define ECHELLE_COUNT 4
 #define BLOCK_COUNT_X 8
@@ -22,7 +23,6 @@ private:
 	void updateStatistics(sf::Time elapsedTime);
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
     std::shared_ptr<Entity> getPlayerFirstCollision(int entityType);
-    bool grounded();
 
 private:
 	static const float		PlayerSpeed;
@@ -30,10 +30,11 @@ private:
 
 	sf::RenderWindow		mWindow;
 	sf::Texture	            mTexture;
-    std::shared_ptr<Entity>	mPlayer;
+    std::shared_ptr<Player>	mPlayer;
 	sf::Font	            mFont;
 	sf::Text	            mStatisticsText;
 	sf::Time	            mStatisticsUpdateTime;
+    sf::CircleShape         mcircle;
 
 	std::size_t	    mStatisticsNumFrames;
 	bool            mIsMovingUp;

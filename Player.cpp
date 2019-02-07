@@ -1,34 +1,31 @@
 #include "pch.h"
-#include "Player.hh"
 #include "Player.h"
 
 Player::Player()
 {
-    auto playerShape = m_sprite.getGlobalBounds();
-    float feetX = playerShape.left + playerShape.width / 2;
-    float feetY = playerShape.top + playerShape.height;
-
     sf::CircleShape circle(1);
-    circle.setOutlineColor(sf::Color::Red);
-    circle.setOutlineThickness(1);
-    circle.setPosition(feetX - 1, feetY - 6);
-
     _feetHitBox = circle;
+    this->updateHitboxes();
 }
 
 Player::~Player()
 {
 }
 
-bool Player::grounded() {
-    auto playerShape = _sprite.getGlobalBounds();
-    float feetX = playerShape.left + playerShape.width / 2;
-    float feetY = playerShape.top + playerShape.height;
+bool Player::grounded(std::vector<std::shared_ptr<Entity>> blocks)
+{
+    for (auto block : blocks) {
+        if (block->m_type == EntityType::block && block->m_sprite.getGlobalBounds().intersects(_feetHitBox.getGlobalBounds())) {
 
-    sf::CircleShape circle(1);
-    circle.setOutlineColor(sf::Color::Red);
-    circle.setOutlineThickness(1);
-    circle.setPosition(feetX - 1, feetY - 6);
+            return true;
+        }
+    }
 
     return false;
+}
+
+void Player::updateHitboxes()
+{
+    sf::FloatRect playerShape = m_sprite.getGlobalBounds();
+    _feetHitBox.setPosition((playerShape.left + playerShape.width / 2) - 1, (playerShape.top + playerShape.height) - 6);
 }

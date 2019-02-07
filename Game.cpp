@@ -67,7 +67,7 @@ Game::Game():
 	posMario.x = 100.f + 70.f;
 	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
 
-	std::shared_ptr<Entity> player = std::make_shared<Entity>();
+	std::shared_ptr<Player> player = std::make_shared<Player>();
 	player->m_sprite.setTexture(mTexture);
 	player->m_type = EntityType::player;
 	player->m_size = mTexture.getSize();
@@ -134,7 +134,8 @@ void Game::update(sf::Time elapsedTime)
     if (mIsMovingUp && getPlayerFirstCollision(EntityType::echelle)) {
         movement.y -= PlayerSpeed + 50.0f;
     }
-    if (!grounded()) {
+    printf("%d\n", mPlayer->grounded(EntityManager::m_Entities));
+    if (!mPlayer->grounded(EntityManager::m_Entities)) {
         movement.y += 50.0f;
         if (mIsMovingDown) {
             movement.y += PlayerSpeed;
@@ -148,6 +149,7 @@ void Game::update(sf::Time elapsedTime)
     }
 
 	mPlayer->m_sprite.move(movement * elapsedTime.asSeconds());
+    mPlayer->updateHitboxes();
 }
 
 void Game::render()
@@ -155,10 +157,11 @@ void Game::render()
 	mWindow.clear();
 
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities) {
-		if (entity->m_enabled) {
-            mWindow.draw(entity->m_sprite);
-		}
+        mWindow.draw(entity->m_sprite);
 	}
+    mWindow.draw(mPlayer->m_sprite);
+
+    mWindow.draw(mcircle);
 
 	mWindow.draw(mStatisticsText);
 	mWindow.display();
@@ -179,35 +182,12 @@ void Game::updateStatistics(sf::Time elapsedTime)
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
 	}
-
-    grounded();
-
+    
     if (mStatisticsUpdateTime >= sf::seconds(0.050f))
 	{
         
 		// Handle collision weapon enemies
 	}
-}
-
-bool Game::grounded() {
-    auto playerShape = mPlayer->m_sprite.getGlobalBounds();
-    float feetX = playerShape.left + playerShape.width / 2;
-    float feetY = playerShape.top + playerShape.height;
-
-    sf::CircleShape circle(1);
-    circle.setOutlineColor(sf::Color::Red);
-    circle.setOutlineThickness(1);
-    circle.setPosition(feetX - 1, feetY - 6);
-
-    for (auto e : EntityManager::m_Entities) {
-        auto eShape = e->m_sprite.getGlobalBounds();
-
-        if (e->m_type == EntityType::block && eShape.intersects(circle.getGlobalBounds())) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 std::shared_ptr<Entity> Game::getPlayerFirstCollision(int entityType = -1)
