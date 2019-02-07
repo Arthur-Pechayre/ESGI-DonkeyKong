@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Player.h"
 
-const float Player::MAX_X_SPEED = 100.0f;
-const float Player::MAX_Y_SPEED = 120.0f;
+const float Player::MAX_X_SPEED = 150;
+const float Player::MAX_Y_SPEED = 200;
 const int Player::FACING_RIGHT = 1;
 const int Player::FACING_LEFT = -1;
 

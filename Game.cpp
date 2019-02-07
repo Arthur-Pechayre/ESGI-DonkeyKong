@@ -3,8 +3,8 @@
 #include "Game.h"
 #include "EntityManager.h"
 
-const float Game::PlayerSpeed = 100.f;
-const float Game::GRAVITY = 100.f;
+const float Game::PlayerSpeed = 150;
+const float Game::GRAVITY = 200;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game():
