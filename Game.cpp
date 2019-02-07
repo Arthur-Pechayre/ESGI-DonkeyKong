@@ -6,18 +6,18 @@
 const float Game::PlayerSpeed = 100.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
-Game::Game()
-	: mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close)
-	, mTexture()
-	, mPlayer()
-	, mFont()
-	, mStatisticsText()
-	, mStatisticsUpdateTime()
-	, mStatisticsNumFrames(0)
-	, mIsMovingUp(false)
-	, mIsMovingDown(false)
-	, mIsMovingRight(false)
-	, mIsMovingLeft(false)
+Game::Game():
+    mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close),
+    mTexture(),
+    mPlayer(),
+    mFont(),
+    mStatisticsText(),
+    mStatisticsUpdateTime(),
+    mStatisticsNumFrames(0),
+    mIsMovingUp(false),
+    mIsMovingDown(false),
+    mIsMovingRight(false),
+    mIsMovingLeft(false)
 {
 	mWindow.setFramerateLimit(160);
 
@@ -63,19 +63,17 @@ Game::Game()
 
 	mTexture.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
 	_sizeMario = mTexture.getSize();
-	mPlayer.setTexture(mTexture);
 	sf::Vector2f posMario;
 	posMario.x = 100.f + 70.f;
 	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
 
-	mPlayer.setPosition(posMario);
-
-	std::shared_ptr<Entity> player = std::make_shared<Entity>();
-	player->m_sprite = mPlayer;
+	std::shared_ptr<Player> player = std::make_shared<Player>();
+	player->m_sprite.setTexture(mTexture);
 	player->m_type = EntityType::player;
 	player->m_size = mTexture.getSize();
-	player->m_position = mPlayer.getPosition();
+	player->m_position = posMario;
 	EntityManager::m_Entities.push_back(player);
+    mPlayer = player;
 
 	// Draw Statistic Font 
 
@@ -132,44 +130,38 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
 	sf::Vector2f movement(0.f, 0.f);
-	if (mIsMovingUp)
-		movement.y -= PlayerSpeed;
-	if (mIsMovingDown)
-		movement.y += PlayerSpeed;
-	if (mIsMovingLeft)
-		movement.x -= PlayerSpeed;
-	if (mIsMovingRight)
-		movement.x += PlayerSpeed;
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
-	{
-		if (entity->m_enabled == false)
-		{
-			continue;
-		}
+    if (mIsMovingUp && getPlayerFirstCollision(EntityType::echelle)) {
+        movement.y -= PlayerSpeed + 50.0f;
+    }
+    printf("%d\n", mPlayer->grounded(EntityManager::m_Entities));
+    if (!mPlayer->grounded(EntityManager::m_Entities)) {
+        movement.y += 50.0f;
+        if (mIsMovingDown) {
+            movement.y += PlayerSpeed;
+        }
+    }
+    if (mIsMovingLeft) {
+        movement.x -= PlayerSpeed;
+    }	
+    if (mIsMovingRight) {
+        movement.x += PlayerSpeed;
+    }
 
-		if (entity->m_type != EntityType::player)
-		{
-			continue;
-		}
-
-		entity->m_sprite.move(movement * elapsedTime.asSeconds());
-	}
+	mPlayer->m_sprite.move(movement * elapsedTime.asSeconds());
+    mPlayer->updateHitboxes();
 }
 
 void Game::render()
 {
 	mWindow.clear();
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
-	{
-		if (entity->m_enabled == false)
-		{
-			continue;
-		}
-
-		mWindow.draw(entity->m_sprite);
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities) {
+        mWindow.draw(entity->m_sprite);
 	}
+    mWindow.draw(mPlayer->m_sprite);
+
+    mWindow.draw(mcircle);
 
 	mWindow.draw(mStatisticsText);
 	mWindow.display();
@@ -184,20 +176,33 @@ void Game::updateStatistics(sf::Time elapsedTime)
 	{
 		mStatisticsText.setString(
 			"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
-			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us");
+			"Time / Update = " + toString(mStatisticsUpdateTime.asMilliseconds() / mStatisticsNumFrames) + "ms"
+        );
 
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
 	}
-
-	//
-	// Handle collision
-	//
-
-	if (mStatisticsUpdateTime >= sf::seconds(0.050f))
+    
+    if (mStatisticsUpdateTime >= sf::seconds(0.050f))
 	{
+        
 		// Handle collision weapon enemies
 	}
+}
+
+std::shared_ptr<Entity> Game::getPlayerFirstCollision(int entityType = -1)
+{
+    auto playerShape = mPlayer->m_sprite.getGlobalBounds();
+
+    for (auto e : EntityManager::m_Entities) {
+        auto eShape = e->m_sprite.getGlobalBounds();
+
+        if ((e->m_type == entityType || entityType == -1) && eShape.intersects(playerShape)) {
+            return e;
+        }
+    }
+
+    return nullptr;
 }
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
