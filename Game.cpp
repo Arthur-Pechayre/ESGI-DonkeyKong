@@ -132,13 +132,14 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
 	sf::Vector2f movement(0.f, 0.f);
+    auto isOnLadder = getPlayerFirstCollision(EntityType::echelle);
 
-    if (mIsMovingUp && getPlayerFirstCollision(EntityType::echelle)) {
+    if (mIsMovingUp && isOnLadder) {
         movement.y -= PlayerSpeed + Game::GRAVITY;
     }
 
     if (!mPlayer->grounded(EntityManager::m_Entities)) {
-        movement.y += Game::GRAVITY;
+        movement.y += isOnLadder ? 0 : Game::GRAVITY;
         if (mIsMovingDown) {
             movement.y += PlayerSpeed;
         }
