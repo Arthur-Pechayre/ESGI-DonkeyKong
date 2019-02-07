@@ -33,5 +33,5 @@ bool Player::grounded(std::vector<std::shared_ptr<Entity>> blocks)
 void Player::updateHitboxes()
 {
     sf::FloatRect playerShape = m_sprite.getGlobalBounds();
-    _feetHitBox.setPosition((playerShape.left + playerShape.width / 2) - 1, (playerShape.top + playerShape.height) - 6);
+    _feetHitBox.setPosition((playerShape.left + playerShape.width / 2) - 1, (playerShape.top + playerShape.height) - 3);
 }
