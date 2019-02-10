@@ -1,10 +1,9 @@
 #include "pch.h"
-#include "ABlock.hh"
+#include "ABlock.h"
 
-ABlock::ABlock()
+ABlock::ABlock(const RessourcesManager& manager, const RessourcesManager::Tids& tid) :
+sf::Sprite(),
+TID(tid)
 {
-}
-
-ABlock::~ABlock()
-{
+    this->setTexture(manager.T_MAP.at(this->TID));
 }

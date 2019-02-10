@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Entity.h"
+#include "ABlock.h"
 
-class Player : public Entity
+class Player : public sf::Sprite
 {
 public:
     static const float MAX_X_SPEED;
@@ -15,8 +15,8 @@ public:
     int                 _facing;
     bool                _facingChanged;
 public:
-    Player();
+    Player(const RessourcesManager& manager);
     ~Player();
-    bool grounded(std::vector<std::shared_ptr<Entity>> blocks);
+    //bool grounded(std::vector<ABlock> blocks);
     void updateHitboxes();
 };

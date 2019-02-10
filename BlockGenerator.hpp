@@ -1,15 +1,15 @@
 #pragma once
 
-#include "StoneBlock.hh"
-#include "ABlock.hh"
+#include "ABlock.h"
+#include "CrackedStoneBrickBlock.h"
 #include <map>
 #include <functional>
 
 class BlockGenerator
 {
 private:
-    std::map<char, std::function<ABlock*(int, int)>> _blocks;
     int _errorCount = 0;
+    std::map<char, std::function<ABlock*(int, int)>> _blocks;
 
     template<typename BlockType>
     void    RegisterBlock(const char& c)
@@ -20,24 +20,23 @@ private:
     }
 
 public:
-    int GetErrorCount() const
-    {
-        int cnt = this->_errorCount;
-        this->_errorCount = 0;
-
-        return cnt;
-    }
-
     BlockGenerator()
     {
-        this->RegisterBlock<AirBlock>(' ');
-        this->RegisterBlock<StoneBlock>('s');
+        this->RegisterBlock<CrackedStoneBrickBlock>('s');
     }
 
     ~BlockGenerator()
     {
         this->_blocks.clear();
     };
+
+    int GetErrorCount()
+    {
+        int cnt = this->_errorCount;
+        _errorCount = 0;
+
+        return cnt;
+    }
 
     ABlock*     CreateBlock(const char& c, int x, int y)
     {
@@ -47,7 +46,7 @@ public:
             block = this->_blocks[c](x, y);
         } catch (const std::bad_function_call& e) {
             ++_errorCount;
-            block = this->_blocks[' '](x, y);
+            block = nullptr;
         }
 
         return (block);

@@ -1,51 +1,54 @@
 #include "pch.h"
 #include "StringHelpers.h"
 #include "Game.h"
-#include "EntityManager.h"
+#include "CrackedStoneBrickBlock.h"
 
 const float Game::PlayerSpeed = 150;
 const float Game::GRAVITY = 200;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
-Game::Game():
-    mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close),
-    mTexture(),
-    mPlayer(),
-    mFont(),
-    mStatisticsText(),
-    mStatisticsUpdateTime(),
-    mStatisticsNumFrames(0),
-    mIsMovingUp(false),
-    mIsMovingDown(false),
-    mIsMovingRight(false),
-    mIsMovingLeft(false)
+Game::Game(const RessourcesManager& manager):
+    _ressourcesManager(manager),
+    _window(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close),
+    _player(manager),
+    _font(),
+    _statisticsText(),
+    _statisticsUpdateTime(),
+    _statisticsNumFrames(0),
+    _isMovingUp(false),
+    _isMovingDown(false),
+    _isMovingRight(false),
+    _isMovingLeft(false)
 {
-	mWindow.setFramerateLimit(160);
+	_window.setFramerateLimit(160);
 
 	// Draw blocks
+	//auto _sizeBlock = _TextureBlock.getSize();
 
-	_TextureBlock.loadFromFile("Media/Textures/Block.png");
-	_sizeBlock = _TextureBlock.getSize();
+	for (int i = 0; i < BLOCK_COUNT_X; i++) {
+		for (int j = 0; j < BLOCK_COUNT_Y; j++) {
+            auto neoBlock = CrackedStoneBrickBlock(this->_ressourcesManager);
+		
+            neoBlock.setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
+            
+            printf("I: %f, WTFX: %f, WTFY: %f\n", i, 100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
 
-	for (int i = 0; i < BLOCK_COUNT_X; i++)
-	{
-		for (int j = 0; j < BLOCK_COUNT_Y; j++)
-		{
-			_Block[i][j].setTexture(_TextureBlock);
-			_Block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
+			//_Block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
 
-			std::shared_ptr<Entity> se = std::make_shared<Entity>();
-			se->m_sprite = _Block[i][j];
-			se->m_type = EntityType::block;
-			se->m_size = _TextureBlock.getSize();
-			se->m_position = _Block[i][j].getPosition();
-			EntityManager::m_Entities.push_back(se);
+			//std::shared_ptr<Entity> se = std::make_shared<Entity>();
+			//se->m_sprite = _Block[i][j];
+			//se->m_type = EntityType::block;
+			//se->m_size = _TextureBlock.getSize();
+			//se->m_position = _Block[i][j].getPosition();
+			//EntityManager::m_Entities.push_back(se);
+
+            _blocks.push_back(neoBlock);
 		}
 	}
 
 	// Draw Echelles
 
-	_TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
+	/*_TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
 
 	for (int i = 0; i < ECHELLE_COUNT; i++)
 	{
@@ -58,39 +61,32 @@ Game::Game():
 		se->m_size = _TextureEchelle.getSize();
 		se->m_position = _Echelle[i].getPosition();
 		EntityManager::m_Entities.push_back(se);
-	}
+	}*/
 
 	// Draw Mario
-
-	mTexture.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
-	_sizeMario = mTexture.getSize();
+	/*_sizeMario = mTexture.getSize();
 	sf::Vector2f posMario;
 	posMario.x = 100.f + 70.f;
-	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
+	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;*/
 
-	std::shared_ptr<Player> player = std::make_shared<Player>();
-	player->m_sprite.setTexture(mTexture);
-	player->m_type = EntityType::player;
-	player->m_size = mTexture.getSize();
-	player->m_position = posMario;
-    player->_facing = 1;
+	_player = Player(this->_ressourcesManager);
+    _player._facing = 1;
 	//EntityManager::m_Entities.push_back(player);
-    mPlayer = player;
 
 	// Draw Statistic Font 
 
-	mFont.loadFromFile("Media/Sansation.ttf");
-	mStatisticsText.setString("Welcome to Donkey Kong 1981");
-	mStatisticsText.setFont(mFont);
-	mStatisticsText.setPosition(5.f, 5.f);
-	mStatisticsText.setCharacterSize(10);
+	_font.loadFromFile("Media/Sansation.ttf");
+	_statisticsText.setString("Welcome to Donkey Kong 1981");
+	_statisticsText.setFont(_font);
+	_statisticsText.setPosition(5.f, 5.f);
+	_statisticsText.setCharacterSize(10);
 }
 
 void Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	while (mWindow.isOpen())
+	while (_window.isOpen())
 	{
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
@@ -110,7 +106,7 @@ void Game::run()
 void Game::processEvents()
 {
 	sf::Event event;
-	while (mWindow.pollEvent(event))
+	while (_window.pollEvent(event))
 	{
 		switch (event.type)
 		{
@@ -123,7 +119,7 @@ void Game::processEvents()
 			break;
 
 		case sf::Event::Closed:
-			mWindow.close();
+            _window.close();
 			break;
 		}
 	}
@@ -132,22 +128,22 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
 	sf::Vector2f movement(0.f, 0.f);
-    auto isOnLadder = getPlayerFirstCollision(EntityType::echelle);
+    //auto isOnLadder = getPlayerFirstCollision(EntityType::echelle);
 
-    if (mIsMovingUp && isOnLadder) {
+    if (_isMovingUp /*&& isOnLadder*/) {
         movement.y -= PlayerSpeed + Game::GRAVITY;
     }
 
-    if (!mPlayer->grounded(EntityManager::m_Entities)) {
-        movement.y += isOnLadder ? 0 : Game::GRAVITY;
-        if (mIsMovingDown) {
+    if (/*!_player.grounded(_blocks)*/1) {
+        movement.y += /*isOnLadder ? 0 :*/ Game::GRAVITY;
+        if (_isMovingDown) {
             movement.y += PlayerSpeed;
         }
     }
-    if (mIsMovingLeft) {
+    if (_isMovingLeft) {
         movement.x -= PlayerSpeed;
     }	
-    if (mIsMovingRight) {
+    if (_isMovingRight) {
         movement.x += PlayerSpeed;
     }
     // Normalisation vecteurs
@@ -162,86 +158,90 @@ void Game::update(sf::Time elapsedTime)
         movement.y = movement.y < -Player::MAX_Y_SPEED ? -Player::MAX_Y_SPEED : movement.y;
     }
     
-    int prevFacing = mPlayer->_facing;
-    mPlayer->_facing = movement.x == 0 ? mPlayer->_facing : movement.x > 1 ? 1 : -1;
-    mPlayer->_facingChanged = prevFacing != mPlayer->_facing;
-	mPlayer->m_sprite.move(movement * elapsedTime.asSeconds());
-    mPlayer->updateHitboxes();
+    int prevFacing = _player._facing;
+    _player._facing = movement.x == 0 ? _player._facing : movement.x > 1 ? 1 : -1;
+    _player._facingChanged = prevFacing != _player._facing;
+	_player.move(movement * elapsedTime.asSeconds());
+    _player.updateHitboxes();
 }
 
 void Game::render()
 {
-	mWindow.clear();
+	_window.clear();
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities) {
-        mWindow.draw(entity->m_sprite);
+    for (int i = 0; i < _blocks.size(); ++i) {
+        printf("BEFORE => ");
+        printf("%d %f %f", i, _blocks[i].getPosition().x, _blocks[i].getPosition().y);
+      
+        _window.draw(_blocks[i]);
+        printf("AFTER\n");
 	}
 
-    printf("Facing : %d | Changed : %d\n", mPlayer->_facing, mPlayer->_facingChanged);
+    printf("Facing : %d | Changed : %d\n", _player._facing, _player._facingChanged);
 
-    if (mPlayer->_facingChanged) {
+    if (_player._facingChanged) {
         sf::Vector2f movement(0.f, 0.f);
 
-        movement.x += mPlayer->_facing * -mPlayer->m_sprite.getGlobalBounds().width;
-        mPlayer->m_sprite.move(movement);
-        mPlayer->_facingChanged = false;
-        mPlayer->m_sprite.scale(-1, 1);
+        movement.x += _player._facing * -_player.getGlobalBounds().width;
+        _player.move(movement);
+        _player._facingChanged = false;
+        _player.scale(-1, 1);
 
     }
-    mWindow.draw(mPlayer->m_sprite);
+    _window.draw(_player);
 
-	mWindow.draw(mStatisticsText);
-	mWindow.display();
+    _window.draw(_statisticsText);
+    _window.display();
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
 {
-	mStatisticsUpdateTime += elapsedTime;
-	mStatisticsNumFrames += 1;
+	_statisticsUpdateTime += elapsedTime;
+	_statisticsNumFrames += 1;
 
-	if (mStatisticsUpdateTime >= sf::seconds(1.0f))
+	if (_statisticsUpdateTime >= sf::seconds(1.0f))
 	{
-		mStatisticsText.setString(
-			"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
-			"Time / Update = " + toString(mStatisticsUpdateTime.asMilliseconds() / mStatisticsNumFrames) + "ms"
+		_statisticsText.setString(
+			"Frames / Second = " + toString(_statisticsNumFrames) + "\n" +
+			"Time / Update = " + toString(_statisticsUpdateTime.asMilliseconds() / _statisticsNumFrames) + "ms"
         );
 
-		mStatisticsUpdateTime -= sf::seconds(1.0f);
-		mStatisticsNumFrames = 0;
+		_statisticsUpdateTime -= sf::seconds(1.0f);
+		_statisticsNumFrames = 0;
 	}
     
-    if (mStatisticsUpdateTime >= sf::seconds(0.050f))
+    if (_statisticsUpdateTime >= sf::seconds(0.050f))
 	{
         
 		// Handle collision weapon enemies
 	}
 }
 
-std::shared_ptr<Entity> Game::getPlayerFirstCollision(int entityType = -1)
+/*ABlock& Game::getPlayerFirstCollision(int entityType = -1)
 {
-    auto playerShape = mPlayer->m_sprite.getGlobalBounds();
+    auto playerShape = _player.getGlobalBounds();
 
-    for (auto e : EntityManager::m_Entities) {
-        auto eShape = e->m_sprite.getGlobalBounds();
+    for (auto e : _blocks) {
+        auto eShape = e.getGlobalBounds();
 
-        if ((e->m_type == entityType || entityType == -1) && eShape.intersects(playerShape)) {
+        if ((e.m_type == entityType || entityType == -1) && eShape.intersects(playerShape)) {
             return e;
         }
     }
 
     return nullptr;
-}
+}*/
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 {
 	if (key == sf::Keyboard::Up)
-		mIsMovingUp = isPressed;
+		_isMovingUp = isPressed;
 	else if (key == sf::Keyboard::Down)
-		mIsMovingDown = isPressed;
+        _isMovingDown = isPressed;
 	else if (key == sf::Keyboard::Left)
-		mIsMovingLeft = isPressed;
+        _isMovingLeft = isPressed;
 	else if (key == sf::Keyboard::Right)
-		mIsMovingRight = isPressed;
+        _isMovingRight = isPressed;
 
 	if (key == sf::Keyboard::Space)
 	{

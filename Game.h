@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Entity.h"
 #include "Player.h"
+#include "RessourcesManager.h"
+#include "ABlock.h"
 
 #define ECHELLE_COUNT 4
 #define BLOCK_COUNT_X 8
@@ -10,44 +11,39 @@
 
 class Game
 {
+    typedef std::vector<ABlock> BlockList;
+
 public:
-	Game();
-	~Game() { };
+	Game(const RessourcesManager&);
+	~Game() {};
 	void run();
-
-private:
-	void processEvents();
-	void update(sf::Time elapsedTime);
-	void render();
-
-	void updateStatistics(sf::Time elapsedTime);
-	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
-    std::shared_ptr<Entity> getPlayerFirstCollision(int entityType);
 
 private:
 	static const float		PlayerSpeed;
 	static const sf::Time	TimePerFrame;
     static const float      GRAVITY;
 
-	sf::RenderWindow		mWindow;
-	sf::Texture	            mTexture;
-    std::shared_ptr<Player>	mPlayer;
-	sf::Font	            mFont;
-	sf::Text	            mStatisticsText;
-    sf::Time	            mStatisticsUpdateTime;
+    const RessourcesManager _ressourcesManager;
 
-	std::size_t	    mStatisticsNumFrames;
-	bool            mIsMovingUp;
-	bool            mIsMovingDown;
-	bool            mIsMovingRight;
-	bool            mIsMovingLeft;
+    sf::RenderWindow    _window;
+    Player	            _player;
+	sf::Font	        _font;
+	sf::Text	        _statisticsText;
+    sf::Time	        _statisticsUpdateTime;
+	std::size_t	        _statisticsNumFrames;
+	bool                _isMovingUp;
+	bool                _isMovingDown;
+	bool                _isMovingRight;
+	bool                _isMovingLeft;
+    BlockList           _blocks;
+	sf::Vector2u        _sizeMario;
 
-	sf::Texture	_TextureEchelle;
-	sf::Sprite	_Echelle[ECHELLE_COUNT];
-	sf::Texture	_TextureBlock;
-	sf::Sprite	_Block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
-	sf::Texture	_TextureWeapon;
-	sf::Sprite	_Weapon;
-	sf::Vector2u _sizeBlock;
-	sf::Vector2u _sizeMario;
+private:
+    void processEvents();
+    void update(sf::Time elapsedTime);
+    void render();
+
+    void updateStatistics(sf::Time elapsedTime);
+    void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+    //ABlock& getPlayerFirstCollision(int entityType);
 };
