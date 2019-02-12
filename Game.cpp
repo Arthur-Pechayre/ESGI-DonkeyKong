@@ -1,7 +1,8 @@
 #include "pch.h"
+
 #include "StringHelpers.h"
 #include "Game.h"
-#include "CrackedStoneBrickBlock.h"
+#include "StonebrickBlock.h"
 
 const float Game::PlayerSpeed = 150;
 const float Game::GRAVITY = 200;
@@ -9,7 +10,8 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game(const RessourcesManager& manager):
     _ressourcesManager(manager),
-    _window(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close),
+    _map(manager),
+    _window(sf::VideoMode(1024, 556), "Donkey Kong 1981", sf::Style::Close),
     _player(manager),
     _font(),
     _statisticsText(),
@@ -22,46 +24,8 @@ Game::Game(const RessourcesManager& manager):
 {
 	_window.setFramerateLimit(160);
 
-	// Draw blocks
-	//auto _sizeBlock = _TextureBlock.getSize();
-
-	for (int i = 0; i < BLOCK_COUNT_X; i++) {
-		for (int j = 0; j < BLOCK_COUNT_Y; j++) {
-            auto neoBlock = CrackedStoneBrickBlock(this->_ressourcesManager);
-		
-            neoBlock.setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
-            
-            printf("I: %f, WTFX: %f, WTFY: %f\n", i, 100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
-
-			//_Block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
-
-			//std::shared_ptr<Entity> se = std::make_shared<Entity>();
-			//se->m_sprite = _Block[i][j];
-			//se->m_type = EntityType::block;
-			//se->m_size = _TextureBlock.getSize();
-			//se->m_position = _Block[i][j].getPosition();
-			//EntityManager::m_Entities.push_back(se);
-
-            _blocks.push_back(neoBlock);
-		}
-	}
-
-	// Draw Echelles
-
-	/*_TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
-
-	for (int i = 0; i < ECHELLE_COUNT; i++)
-	{
-		_Echelle[i].setTexture(_TextureEchelle);
-		_Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y );
-
-		std::shared_ptr<Entity> se = std::make_shared<Entity>();
-		se->m_sprite = _Echelle[i];
-		se->m_type = EntityType::echelle;
-		se->m_size = _TextureEchelle.getSize();
-		se->m_position = _Echelle[i].getPosition();
-		EntityManager::m_Entities.push_back(se);
-	}*/
+    _map.loadMap();
+   
 
 	// Draw Mario
 	/*_sizeMario = mTexture.getSize();
@@ -70,8 +34,6 @@ Game::Game(const RessourcesManager& manager):
 	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;*/
 
 	_player = Player(this->_ressourcesManager);
-    _player._facing = 1;
-	//EntityManager::m_Entities.push_back(player);
 
 	// Draw Statistic Font 
 
@@ -134,7 +96,7 @@ void Game::update(sf::Time elapsedTime)
         movement.y -= PlayerSpeed + Game::GRAVITY;
     }
 
-    if (/*!_player.grounded(_blocks)*/1) {
+    if (!this->isPlayerGrounded()) {
         movement.y += /*isOnLadder ? 0 :*/ Game::GRAVITY;
         if (_isMovingDown) {
             movement.y += PlayerSpeed;
@@ -157,9 +119,12 @@ void Game::update(sf::Time elapsedTime)
     } else {
         movement.y = movement.y < -Player::MAX_Y_SPEED ? -Player::MAX_Y_SPEED : movement.y;
     }
+
+    //Gestion collisions
+
     
     int prevFacing = _player._facing;
-    _player._facing = movement.x == 0 ? _player._facing : movement.x > 1 ? 1 : -1;
+    _player._facing = movement.x == 0 ? _player._facing : movement.x > 0 ? Player::FACING_RIGHT : Player::FACING_LEFT;
     _player._facingChanged = prevFacing != _player._facing;
 	_player.move(movement * elapsedTime.asSeconds());
     _player.updateHitboxes();
@@ -169,15 +134,13 @@ void Game::render()
 {
 	_window.clear();
 
-    for (int i = 0; i < _blocks.size(); ++i) {
-        printf("BEFORE => ");
-        printf("%d %f %f", i, _blocks[i].getPosition().x, _blocks[i].getPosition().y);
-      
-        _window.draw(_blocks[i]);
-        printf("AFTER\n");
+    for (int i = 0; i < _map.tileMap.size(); ++i) {
+        for (int j = 0; j < _map.tileMap[i].size(); ++j) {
+            _window.draw(*_map.tileMap[i][j]);
+        }
 	}
 
-    printf("Facing : %d | Changed : %d\n", _player._facing, _player._facingChanged);
+    //printf("Facing : %d | Changed : %d\n", _player._facing, _player._facingChanged);
 
     if (_player._facingChanged) {
         sf::Vector2f movement(0.f, 0.f);
@@ -246,4 +209,17 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 	if (key == sf::Keyboard::Space)
 	{
 	}
+}
+
+bool Game::isPlayerGrounded()
+{
+    for (auto blockLine : _map.tileMap) {
+        for (auto &block : blockLine) {
+            if (block->getGlobalBounds().intersects(_player._feetHitBox.getGlobalBounds())) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

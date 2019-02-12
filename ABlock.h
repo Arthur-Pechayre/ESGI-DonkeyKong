@@ -5,9 +5,9 @@
 class ABlock : public sf::Sprite
 {
 private:
-    const RessourcesManager::Tids TID;
+    const RessourcesManager::Tids _tid;
 
 public:
-    ABlock(const RessourcesManager& manager, const RessourcesManager::Tids& tid);
+    ABlock(const RessourcesManager&, const RessourcesManager::Tids&);
     virtual ~ABlock() {};
 };

@@ -1,10 +1,14 @@
 #include "pch.h"
 
 #include "RessourcesManager.h"
+#define ASSETS_PATH "Media/Textures"
 
-std::map<RessourcesManager::Tids, std::string> RessourcesManager::T_PATHS = {
-    {Bcracked_stone_bricks, "Media/Textures/Block.png"},
-    {Eplayer, "Media/Textures/Mario_small_transparent.png"}
+const std::map<RessourcesManager::Tids, std::string> RessourcesManager::T_PATHS = {
+    {Bstonebrick, ASSETS_PATH"/Blocks/stonebrick.png"},
+    {Bstonebrick_mossy, ASSETS_PATH"/Blocks/stonebrick_mossy.png"},
+    {Bstonebrick_craked, ASSETS_PATH"/Blocks/stonebrick_cracked.png"},
+    {Bair, ""},
+    {Eplayer, ASSETS_PATH"/Entities/Mario_small_transparent.png"}
 };
 
 RessourcesManager::RessourcesManager() :
@@ -12,15 +16,8 @@ RessourcesManager::RessourcesManager() :
 {
     for (auto texture : T_PATHS) {
         T_MAP[texture.first] = sf::Texture();
-        T_MAP[texture.first].loadFromFile(texture.second);
-
-        /*
-        auto& neo = new std::pair<Textures::Tids, sf::Texture> neo();
-        neo.first = texture.first;
-        neo.second = sf::Texture();
-        neo.second.loadFromFile(texture.second);
-
-        map.insert(neo);
-        */
+        if (texture.second != "") {
+            T_MAP[texture.first].loadFromFile(texture.second);
+        }
     }
 }

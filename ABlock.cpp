@@ -3,7 +3,7 @@
 
 ABlock::ABlock(const RessourcesManager& manager, const RessourcesManager::Tids& tid) :
 sf::Sprite(),
-TID(tid)
+_tid(tid)
 {
-    this->setTexture(manager.T_MAP.at(this->TID));
+    this->setTexture(manager.T_MAP.at(this->_tid));
 }

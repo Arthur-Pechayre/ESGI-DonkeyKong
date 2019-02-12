@@ -10,13 +10,12 @@ public:
     static const int FACING_RIGHT;
     static const int FACING_LEFT;
 
-    sf::CircleShape     _feetHitBox;
+    sf::RectangleShape  _feetHitBox;
     sf::FloatRect       _hitBox;
     int                 _facing;
     bool                _facingChanged;
 public:
     Player(const RessourcesManager& manager);
     ~Player();
-    //bool grounded(std::vector<ABlock> blocks);
     void updateHitboxes();
 };

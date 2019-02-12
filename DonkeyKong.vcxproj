@@ -156,19 +156,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ABlock.h" />
+    <ClInclude Include="AirBlock.h" />
     <ClInclude Include="BlockGenerator.hpp" />
-    <ClInclude Include="CrackedStoneBrickBlock.h" />
+    <ClInclude Include="StonebrickBlock.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="StringHelpers.h" />
     <ClInclude Include="RessourcesManager.h" />
+    <ClInclude Include="StringHelpers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ABlock.cpp" />
-    <ClCompile Include="CrackedStoneBrickBlock.cpp" />
+    <ClCompile Include="AirBlock.cpp" />
+    <ClCompile Include="StonebrickBlock.cpp" />
     <ClCompile Include="DonkeyKong.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
