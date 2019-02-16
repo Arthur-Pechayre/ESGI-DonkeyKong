@@ -1,11 +1,8 @@
 #pragma once
 
-#include "Player.h"
 #include "RessourcesManager.h"
-#include "StonebrickBlock.h"
+#include "PlayerManager.h"
 #include "StringHelpers.h"
-#include "PlayerSurroundings.hpp"
-#include "ABlock.h"
 #include "Map.h"
 
 #define ECHELLE_COUNT 4
@@ -18,22 +15,21 @@ class Game
 private:
     const RessourcesManager     ressourcesManager;
 
-    static const sf::Time	    TimePerFrame; // Todo remove
-    static const float          GRAVITY; 
-
     sf::RenderWindow            window;
-    Player	                    player;
-    PlayerSurroundings          playerSurroundings;
-    sf::Font	                font;
-    sf::Text	                statisticsText;
+    PlayerManager               playerManager;
+    Map                         map;
+
+    static const sf::Time	    TimePerFrame; // Todo move in const.h
+    static const float          GRAVITY; // Todo move in const.h
+
+    sf::Font	                font; // Todo move in ressource manager
+    sf::Text	                statisticsText; // Todo make ui 
     sf::Time	                statisticsUpdateTime;
     std::size_t	                statisticsNumFrames;
-    bool                        isMovingUp;
+    bool                        isMovingUp; //To do move
     bool                        isMovingDown;
     bool                        isMovingRight;
     bool                        isMovingLeft;
-    Map                         map;
-    sf::Vector2u                sizeMario;
 
 public:
     Game(const RessourcesManager&);
@@ -42,12 +38,10 @@ public:
 
 private:
     void processEvents();
-    void update(sf::Time);
+    void update(const sf::Time&);
+    void updatePlayer(const sf::Time&);
     void render();
-
-    void applyMovementConstraints(sf::Vector2f&, const sf::Time&);
 
     void updateStatistics(sf::Time elapsedTime);
     void handlePlayerInput(sf::Keyboard::Key, bool);
-    //ABlock& getPlayerFirstCollision(int entityType);
 };

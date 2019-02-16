@@ -156,9 +156,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ABlock.h" />
+    <ClInclude Include="AEntity.h" />
     <ClInclude Include="AirBlock.h" />
     <ClInclude Include="ASolidBlock.hpp" />
     <ClInclude Include="BlockGenerator.hpp" />
+    <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PlayerSurroundings.hpp" />
     <ClInclude Include="StonebrickBlock.h" />
     <ClInclude Include="Game.h" />
@@ -170,7 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ABlock.cpp" />
+    <ClCompile Include="AEntity.cpp" />
     <ClCompile Include="AirBlock.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="StonebrickBlock.cpp" />
     <ClCompile Include="DonkeyKong.cpp" />
     <ClCompile Include="Game.cpp" />

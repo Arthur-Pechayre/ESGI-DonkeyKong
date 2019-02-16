@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Blocks">
       <UniqueIdentifier>{5ac8bc8e-b64b-4ad0-b667-e52e6e460fb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{3bec57f0-be1e-4640-a0a3-8b0775d24567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities">
+      <UniqueIdentifier>{37af1196-eceb-42fe-ac90-ad6b6403ad45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -32,9 +38,6 @@
     </ClInclude>
     <ClInclude Include="BlockGenerator.hpp">
       <Filter>Header Files\Blocks</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RessourcesManager.h">
       <Filter>Header Files</Filter>
@@ -55,7 +58,16 @@
       <Filter>Header Files\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="PlayerSurroundings.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="AEntity.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -66,9 +78,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RessourcesManager.cpp">
@@ -88,6 +97,15 @@
     </ClCompile>
     <ClCompile Include="StringHelpers.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="AEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>Source Files\Entities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

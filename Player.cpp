@@ -8,7 +8,6 @@ const int Player::FACING_RIGHT = 1;
 const int Player::FACING_LEFT = -1;
 
 Player::Player(const RessourcesManager& manager):
-sf::Sprite(),
 facingChanged(false),
 facing(FACING_RIGHT)
 {
@@ -19,32 +18,16 @@ Player::~Player()
 {
 }
 
-float Player::width() const
+void Player::draw(sf::RenderWindow& w)
 {
-    return this->getGlobalBounds().width;
-}
+    if (this->facingChanged) {
+        sf::Vector2f movement(0.f, 0.f);
 
-float Player::height() const
-{
-    return this->getGlobalBounds().height;
-}
+        movement.x += this->facing * -this->getGlobalBounds().width;
+        this->move(movement);
+        this->facingChanged = false;
+        this->scale(-1, 1);
+    }
 
-float Player::top() const
-{
-    return this->getGlobalBounds().top;
-}
-
-float Player::bot() const
-{
-    return this->getGlobalBounds().top + this->height();
-}
-
-float Player::left() const
-{
-    return this->getGlobalBounds().left;
-}
-
-float Player::right() const
-{
-    return this->getGlobalBounds().left + this->width();
+    w.draw(*this);
 }

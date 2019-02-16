@@ -1,8 +1,9 @@
 #pragma once
 
 #include "ABlock.h"
+#include "AEntity.h"
 
-class Player : public sf::Sprite
+class Player : public AEntity
 {
 public:
     static const float  SPEED;
@@ -17,10 +18,5 @@ public:
 public:
     Player(const RessourcesManager&);
     ~Player();
-    float width() const;
-    float height() const;
-    float top() const;
-    float bot() const;
-    float left() const;
-    float right() const;
+    void draw(sf::RenderWindow&);
 };

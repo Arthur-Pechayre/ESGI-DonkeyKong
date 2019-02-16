@@ -6,6 +6,15 @@ Map::Map(const RessourcesManager& manager) :
 {
 }
 
+void Map::draw(sf::RenderWindow& w)
+{
+    for (int y = 0; y < this->tileMap.size(); ++y) {
+        for (int x = 0; x < this->tileMap[y].size(); ++x) {
+            w.draw(*this->tileMap[y][x]);
+        }
+    }
+}
+
 void Map::loadMap()
 {
     auto bg = BlockGenerator();

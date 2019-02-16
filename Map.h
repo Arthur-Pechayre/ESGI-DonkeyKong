@@ -16,4 +16,5 @@ public:
     Map(const RessourcesManager&);
     ~Map() {};
     void loadMap();
+    void draw(sf::RenderWindow&);
 };
