@@ -11,6 +11,7 @@ public:
     
 private:
     const RessourcesManager* ressourcesManager;
+
 public:
     Map(const RessourcesManager&);
     ~Map() {};

@@ -2,6 +2,9 @@
 
 #include "Player.h"
 #include "RessourcesManager.h"
+#include "StonebrickBlock.h"
+#include "StringHelpers.h"
+#include "PlayerSurroundings.hpp"
 #include "ABlock.h"
 #include "Map.h"
 
@@ -13,40 +16,38 @@
 class Game
 {
 private:
-    const RessourcesManager _ressourcesManager;
+    const RessourcesManager     ressourcesManager;
 
-    static const float		PlayerSpeed; // Todo remove
-    static const sf::Time	TimePerFrame; // Todo remove
-    static const float      GRAVITY; 
+    static const sf::Time	    TimePerFrame; // Todo remove
+    static const float          GRAVITY; 
 
-    sf::RenderWindow    _window;
-    Player	            _player;
-    sf::Font	        _font;
-    sf::Text	        _statisticsText;
-    sf::Time	        _statisticsUpdateTime;
-    std::size_t	        _statisticsNumFrames;
-    bool                _isMovingUp;
-    bool                _isMovingDown;
-    bool                _isMovingRight;
-    bool                _isMovingLeft;
-    Map                 _map;
-    sf::Vector2u        _sizeMario;
+    sf::RenderWindow            window;
+    Player	                    player;
+    PlayerSurroundings          playerSurroundings;
+    sf::Font	                font;
+    sf::Text	                statisticsText;
+    sf::Time	                statisticsUpdateTime;
+    std::size_t	                statisticsNumFrames;
+    bool                        isMovingUp;
+    bool                        isMovingDown;
+    bool                        isMovingRight;
+    bool                        isMovingLeft;
+    Map                         map;
+    sf::Vector2u                sizeMario;
 
 public:
-    
-
-	Game(const RessourcesManager&);
+    Game(const RessourcesManager&);
 	~Game() {};
 	void run();
 
 private:
     void processEvents();
-    void update(sf::Time elapsedTime);
+    void update(sf::Time);
     void render();
 
-    bool isPlayerGrounded();
+    void applyMovementConstraints(sf::Vector2f&, const sf::Time&);
 
     void updateStatistics(sf::Time elapsedTime);
-    void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+    void handlePlayerInput(sf::Keyboard::Key, bool);
     //ABlock& getPlayerFirstCollision(int entityType);
 };

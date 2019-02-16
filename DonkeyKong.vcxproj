@@ -157,7 +157,9 @@
   <ItemGroup>
     <ClInclude Include="ABlock.h" />
     <ClInclude Include="AirBlock.h" />
+    <ClInclude Include="ASolidBlock.hpp" />
     <ClInclude Include="BlockGenerator.hpp" />
+    <ClInclude Include="PlayerSurroundings.hpp" />
     <ClInclude Include="StonebrickBlock.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Map.h" />

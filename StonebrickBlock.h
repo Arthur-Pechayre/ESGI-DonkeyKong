@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ABlock.h"
+#include "ASolidBlock.hpp"
 #include "RessourcesManager.h"
 #include <random>
 
-class StonebrickBlock : public ABlock
+class StonebrickBlock : public ABlock, virtual public ASolidBlock
 {
 
 private:

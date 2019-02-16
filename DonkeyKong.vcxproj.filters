@@ -42,13 +42,19 @@
     <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StonebrickBlock.h">
-      <Filter>Header Files\Blocks</Filter>
-    </ClInclude>
     <ClInclude Include="AirBlock.h">
       <Filter>Header Files\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="StringHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StonebrickBlock.h">
+      <Filter>Header Files\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="ASolidBlock.hpp">
+      <Filter>Header Files\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSurroundings.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Player.h"
 
+const float Player::SPEED = 150;
 const float Player::MAX_X_SPEED = 150;
 const float Player::MAX_Y_SPEED = 200;
 const int Player::FACING_RIGHT = 1;
@@ -8,22 +9,42 @@ const int Player::FACING_LEFT = -1;
 
 Player::Player(const RessourcesManager& manager):
 sf::Sprite(),
-_feetHitBox(),
-_facingChanged(false),
-_facing(FACING_RIGHT)
+facingChanged(false),
+facing(FACING_RIGHT)
 {
     this->setTexture(manager.T_MAP.at(RessourcesManager::Tids::Eplayer));
-    _feetHitBox.setSize(sf::Vector2f(this->getGlobalBounds().width, 1));
-    this->updateHitboxes();
 }
 
 Player::~Player()
 {
 }
 
-void Player::updateHitboxes()
+float Player::width() const
 {
-    sf::FloatRect playerShape = this->getGlobalBounds();
+    return this->getGlobalBounds().width;
+}
 
-    _feetHitBox.setPosition(playerShape.left, playerShape.top + playerShape.height);
+float Player::height() const
+{
+    return this->getGlobalBounds().height;
+}
+
+float Player::top() const
+{
+    return this->getGlobalBounds().top;
+}
+
+float Player::bot() const
+{
+    return this->getGlobalBounds().top + this->height();
+}
+
+float Player::left() const
+{
+    return this->getGlobalBounds().left;
+}
+
+float Player::right() const
+{
+    return this->getGlobalBounds().left + this->width();
 }

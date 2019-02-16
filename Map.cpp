@@ -11,16 +11,21 @@ void Map::loadMap()
     auto bg = BlockGenerator();
 
     std::vector<std::string> map = {
-        "                                ",
-        "                                ",
-        "      sssssssssssssssssssss  sss",
-        "     s                      ssss",
-        "    s                      sssss",
-        "   s                      ssssss",
-        "sssssssssssssssssssssss  sssssss",
-        "s                               ",
-        "s                               ",
-        "ssssssssssssssssssssssssssssssss"
+        "                ",
+        "                ",
+        "            ssss",
+        "      ssss      ",
+        "ssss            ",
+        "            ssss",
+        "      ssss      ",
+        "ssss            ",
+        "            ssss",
+        "      ssss      ",
+        "ssss            ",
+        "            ssss",
+        "      ssss      ",
+        "ssss            ",
+        "ssssssssssssssss"
     };
 
     int xmax = 0;

@@ -44,7 +44,7 @@ public:
 
     ABlock* CreateBlock(const char& c, const RessourcesManager& manager)
     {
-        ABlock*     block;
+        ABlock* block;
         
         try {
             block = this->_blocks[c](manager);

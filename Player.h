@@ -5,17 +5,22 @@
 class Player : public sf::Sprite
 {
 public:
-    static const float MAX_X_SPEED;
-    static const float MAX_Y_SPEED;
-    static const int FACING_RIGHT;
-    static const int FACING_LEFT;
+    static const float  SPEED;
+    static const float  MAX_X_SPEED;
+    static const float  MAX_Y_SPEED;
+    static const int    FACING_RIGHT;
+    static const int    FACING_LEFT;
 
-    sf::RectangleShape  _feetHitBox;
-    sf::FloatRect       _hitBox;
-    int                 _facing;
-    bool                _facingChanged;
+    int                 facing;
+    bool                facingChanged;
+
 public:
-    Player(const RessourcesManager& manager);
+    Player(const RessourcesManager&);
     ~Player();
-    void updateHitboxes();
+    float width() const;
+    float height() const;
+    float top() const;
+    float bot() const;
+    float left() const;
+    float right() const;
 };
