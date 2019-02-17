@@ -19,6 +19,15 @@ void PlayerManager::updateFacing()
     this->player.facingChanged = prevFacing != this->player.facing;
 }
 
+void PlayerManager::updateJumpingCD(bool jumping, const sf::Time& elapsedTime)
+{
+    if (jumping) {
+        this->player.jumpCooldown = sf::seconds(Player::JUMP_CD);
+    } else if (this->player.jumpCooldown > sf::Time::Zero) {
+        this->player.jumpCooldown -= elapsedTime;
+    }
+}
+
 void PlayerManager::updateSurroundings(const Map& map)
 {
     this->playerSurroundings.update(this->player, map);
@@ -30,6 +39,7 @@ void PlayerManager::move(sf::Vector2f& acceleration, const sf::Time& elapsedTime
     if (!jumping && abs(this->player.velocity.y) > Player::MAX_Y_SPEED) {
         this->player.velocity.y = this->player.velocity.y > 0 ? Player::MAX_Y_SPEED : -Player::MAX_Y_SPEED;
     }
+    this->updateJumpingCD(jumping, elapsedTime);
     this->applyGravity();
     this->applyFriction();
     this->handleCollisions(elapsedTime);
@@ -73,6 +83,13 @@ ABlock* PlayerManager::isOnLadder()
 ABlock* PlayerManager::isGrounded()
 {
     return this->playerSurroundings.isCollidingB<ASolidBlock>(this->player.getGlobalBounds());
+}
+
+bool PlayerManager::canJump()
+{
+    return this->isOnLadder() == nullptr &&
+        this->isGrounded() != nullptr &&
+        this->player.jumpCooldown <= sf::Time::Zero;
 }
 
 void PlayerManager::applyFriction()

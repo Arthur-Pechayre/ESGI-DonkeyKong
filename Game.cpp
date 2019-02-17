@@ -97,8 +97,8 @@ void Game::updatePlayer(const sf::Time& elapsedTime)
         acceleration /= std::sqrt(2.f);
     }
 
-    if (this->isJumping && !onLadder && this->playerManager.isGrounded()) {
-        acceleration.y -= Game::GRAVITY + (Player::SPEED * 4);
+    if (this->isJumping && !onLadder && this->playerManager.canJump()) {
+        acceleration.y -= Game::GRAVITY + Player::JUMP_FORCE;
         jumping = true;
     }
 

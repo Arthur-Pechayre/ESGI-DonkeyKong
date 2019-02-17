@@ -39,11 +39,11 @@ void Map::loadMap()
         "    l           ",
         "    l           ",
         "    l           ",
+        "    lssss  s ss ",
         "    l           ",
         "    l           ",
         "    l           ",
-        "    l           ",
-        "    l           ",
+        "    l  ss       ",
         "ssssssssssssssss",
     };
 

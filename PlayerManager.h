@@ -17,11 +17,15 @@ public:
     PlayerManager(const RessourcesManager&);
     ~PlayerManager();
     void    updateSurroundings(const Map&);
-    void    updateFacing();
     void    move(sf::Vector2f&, const sf::Time&, bool);
+    ABlock* isOnLadder();
+    ABlock* isGrounded();
+    bool    canJump();
+
+private:
+    void    updateJumpingCD(bool, const sf::Time&);
     void    handleCollisions(const sf::Time&);
     void    applyFriction();
     void    applyGravity();
-    ABlock* isOnLadder();
-    ABlock* isGrounded();
+    void    updateFacing();
 };

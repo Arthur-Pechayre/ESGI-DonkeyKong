@@ -5,13 +5,16 @@
 const float Player::SPEED = PLAYER_SPEED;
 const float Player::MAX_X_SPEED = PLAYER_MAX_SPEED_X;
 const float Player::MAX_Y_SPEED = PLAYER_MAX_SPEED_Y;
+const float Player::JUMP_CD = PLAYER_JUMP_CD;
+const int Player::JUMP_FORCE = PLAYER_JUMP_FORCE;
 const int Player::FACING_RIGHT = 1;
 const int Player::FACING_LEFT = -1;
 
 Player::Player(const RessourcesManager& manager) :
     facingChanged(false),
     facing(FACING_RIGHT),
-    velocity(0, 0)
+    velocity(0, 0),
+    jumpCooldown(sf::Time::Zero)
 {
     this->setTexture(manager.T_MAP.at(RessourcesManager::Tids::Eplayer));
 }

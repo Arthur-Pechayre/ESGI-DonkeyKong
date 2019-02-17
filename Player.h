@@ -7,6 +7,8 @@ class Player : public AEntity
 {
 public:
     static const float  SPEED;
+    static const float  JUMP_CD;
+    static const int    JUMP_FORCE;
     static const float  MAX_X_SPEED;
     static const float  MAX_Y_SPEED;
     static const int    FACING_RIGHT;
@@ -14,6 +16,7 @@ public:
 
     int                 facing;
     bool                facingChanged;
+    sf::Time            jumpCooldown;
 
     sf::Vector2f        velocity;
 
