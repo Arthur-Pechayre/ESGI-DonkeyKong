@@ -4,23 +4,20 @@
 #include "PlayerManager.h"
 #include "EntityManager.h"
 #include "StringHelpers.h"
+#include "Score.h"
 #include "Map.h"
-
-#define ECHELLE_COUNT 4
-#define BLOCK_COUNT_X 8
-#define BLOCK_COUNT_Y 5
-#define BLOCK_SPACE 110.f
 
 class Game
 {
 private:
+    static const sf::Time	    TimePerFrame;
     const RessourcesManager     ressourcesManager;
 
     sf::RenderWindow            window;
     PlayerManager               playerManager;
+    EntityManager               entityManager;
     Map                         map;
-
-    static const sf::Time	    TimePerFrame; // Todo move in const.h
+    Score                       score;
 
     sf::Font	                font; // Todo move in ressource manager
     sf::Text	                statisticsText; // Todo make ui 
@@ -33,8 +30,8 @@ private:
     bool                        isJumping;
 
 public:
-    static const float          GRAVITY; // Todo move in const.h
-    static const float          FRICTION; // Todo move in const.h
+    static const float          GRAVITY;
+    static const float          FRICTION;
 
     Game(const RessourcesManager&);
 	~Game() {};
