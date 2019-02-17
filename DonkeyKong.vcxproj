@@ -158,8 +158,11 @@
     <ClInclude Include="ABlock.h" />
     <ClInclude Include="AEntity.h" />
     <ClInclude Include="AirBlock.h" />
-    <ClInclude Include="ASolidBlock.hpp" />
+    <ClInclude Include="ASolidBlock.h" />
+    <ClInclude Include="BedrockBlock.h" />
     <ClInclude Include="BlockGenerator.hpp" />
+    <ClInclude Include="Const.h" />
+    <ClInclude Include="LadderBlock.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PlayerSurroundings.hpp" />
     <ClInclude Include="StonebrickBlock.h" />
@@ -174,6 +177,8 @@
     <ClCompile Include="ABlock.cpp" />
     <ClCompile Include="AEntity.cpp" />
     <ClCompile Include="AirBlock.cpp" />
+    <ClCompile Include="BedrockBlock.cpp" />
+    <ClCompile Include="LadderBlock.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="StonebrickBlock.cpp" />
     <ClCompile Include="DonkeyKong.cpp" />

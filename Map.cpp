@@ -2,8 +2,11 @@
 #include "Map.h"
 
 Map::Map(const RessourcesManager& manager) :
-    ressourcesManager{&manager}
+    ressourcesManager{&manager},
+    initializersMap(),
+    size(0, 0)
 {
+    this->initializersMap.insert(std::pair<char, EntityPositionInitializer>('P', &Map::initPlayerOnBlock));
 }
 
 void Map::draw(sf::RenderWindow& w)
@@ -21,55 +24,79 @@ void Map::loadMap()
 
     std::vector<std::string> map = {
         "                ",
-        "                ",
-        "            ssss",
-        "      ssss      ",
-        "ssss            ",
-        "            ssss",
-        "      ssss      ",
-        "ssss            ",
-        "            ssss",
-        "      ssss      ",
-        "ssss            ",
-        "            ssss",
-        "      ssss      ",
-        "ssss            ",
-        "ssssssssssssssss"
+        "    l           ",
+        "ssssl           ",
+        "    l    P      ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "    l           ",
+        "ssssssssssssssss",
     };
 
-    int xmax = 0;
-    for (int y = 0; y < map.size(); ++y) {
+    this->size.y = map.size();
+    for (int y = 1; y < map.size() + 1; ++y) {
         std::vector<ABlock*> b;
-        ++this->size.x;
         
-        for (int x = 0; x < map[y].size(); ++x) {
-            ABlock* _block = bg.CreateBlock(map[y][x], *ressourcesManager);
-            _block->setPosition((float)(x * 32), (float)(y * 32));
+        for (int x = 1; x < map[y - 1].size() + 1; ++x) {
+            ABlock* neoBlock = bg.CreateBlock(map[y - 1][x - 1], *ressourcesManager);
 
-            //CreateCharacterAndObject(readedLine.c_str()[column], _block);
-            b.insert(b.end(), _block);
-
-            xmax = x > xmax ? x : xmax;
+            neoBlock->setPosition((float)(x * 32), (float)(y * 32));
+            this->initEntitiesPositions(map[y - 1][x - 1], neoBlock);
+            
+            b.insert(b.end(), neoBlock);
+            this->size.x = this->size.x < map[y - 1].size() ? map[y - 1].size() : this->size.x;
         }
         this->tileMap.insert(this->tileMap.end(), b);
     }
-    this->size.x = xmax;
-    this->size.y = map.size();
 
-    // Draw Echelles
+    this->size.y += 2;
+    this->size.x += 2;
+    for (int y = 0; y < this->size.y; ++y) {
+        if (y == 0 || y == this->size.y - 1) {
+            std::vector<ABlock*> b;
+            for (int x = 0; x < this->size.x; ++x) {
+                ABlock* neoBlock = bg.CreateBlock(0, *ressourcesManager);
+                neoBlock->setPosition((float)(x * 32), (float)(y * 32));
 
-    /*_TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
+                b.insert(b.end(), neoBlock);
+            }
+            this->tileMap.insert(y == 0 ? this->tileMap.begin() : this->tileMap.end(), b);
+        } else {
+            this->tileMap[y].insert(this->tileMap[y].begin(), bg.CreateBlock(0, *ressourcesManager));
+            this->tileMap[y].insert(this->tileMap[y].end(), bg.CreateBlock(0, *ressourcesManager));
+            this->tileMap[y][0]->setPosition((float)(0), (float)(y * 32));
+            this->tileMap[y][this->tileMap[y].size() - 1]->setPosition((float)((this->tileMap[y].size() - 1) * 32), (float)(y * 32));
+        }
+    }
 
-    for (int i = 0; i < ECHELLE_COUNT; i++)
-    {
-        _Echelle[i].setTexture(_TextureEchelle);
-        _Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y );
+    
+}
 
-        std::shared_ptr<Entity> se = std::make_shared<Entity>();
-        se->m_sprite = _Echelle[i];
-        se->m_type = EntityType::echelle;
-        se->m_size = _TextureEchelle.getSize();
-        se->m_position = _Echelle[i].getPosition();
-        EntityManager::m_Entities.push_back(se);
-    }*/
+void Map::initPlayerOnBlock(const ABlock* block)
+{
+    this->initPlayerPos = block->getPosition();
+    ++this->initPlayerPos.y;
+}
+
+void Map::initEntitiesPositions(const char& c, const ABlock* block)
+{
+    std::map<char, EntityPositionInitializer>::iterator pos;
+    pos = this->initializersMap.find(c);
+    if (pos != initializersMap.end()) {
+        (this->*pos->second)(block);
+    }
 }

@@ -20,7 +20,9 @@ public:
         MiddleBotR,
         BotL,
         Bot,
-        BotR
+        BotR,
+        Head,
+        Legs
     };
     std::vector<ABlock*>    blocks;
 
@@ -38,7 +40,7 @@ private:
 
 public:
     PlayerSurroundings() :
-        blocks(10, nullptr)
+        blocks(12, nullptr)
     {
     };
 
@@ -57,20 +59,25 @@ public:
         this->blocks[Pos::BotL] = bot > map.size.y || left < 0 ? nullptr : map.tileMap[bot][left];
         this->blocks[Pos::Bot] = bot > map.size.y ? nullptr : map.tileMap[bot][x];
         this->blocks[Pos::BotR] = bot > map.size.y || right > map.size.x ? nullptr : map.tileMap[bot][right];
+        this->blocks[Pos::Legs] = map.tileMap[y][x];
         this->blocks[Pos::MiddleBotL] = left < 0 ? nullptr : map.tileMap[y][left];
         this->blocks[Pos::MiddleBotR] = right > map.size.x ? nullptr : map.tileMap[y][right];
+        this->blocks[Pos::Head] = map.tileMap[head][x];
         this->blocks[Pos::MiddleTopL] = head < 0 || left < 0 ? nullptr : map.tileMap[head][left];
         this->blocks[Pos::MiddleTopR] = head < 0 || right > map.size.x ? nullptr : map.tileMap[y - 1][right];
         this->blocks[Pos::TopL] = top < 0 || left < 0 ? nullptr : map.tileMap[top][left];
         this->blocks[Pos::Top] = top < 0 ? nullptr : map.tileMap[top][x];
-        this->blocks[Pos::TopR] = top < 0 || right > map.size.x ? nullptr : map.tileMap[top][right];
+        this->blocks[Pos::TopR] = top < 0 || right > map.size.x ? nullptr : map.tileMap[top][right];    
     };
 
     template <typename Block>
     ABlock* isCollidingL(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
+        hb.top += 2;
         hb.left -= 1;
+        hb.width += 2;
+        hb.height -= 4;
 
         return this->isColliding<Block>(hb, { Pos::TopL, Pos::MiddleTopL, Pos::MiddleBotL, Pos::BotL });
     };
@@ -79,7 +86,10 @@ public:
     ABlock* isCollidingR(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
-        hb.width += 1;
+        hb.top += 2;
+        hb.left -= 1;
+        hb.width += 2;
+        hb.height -= 4;
 
         return this->isColliding<Block>(hb, { Pos::TopR, Pos::MiddleTopR, Pos::MiddleBotR, Pos::BotR });
     };
@@ -89,6 +99,9 @@ public:
     {
         sf::FloatRect hb(playerHitBox);
         hb.top -= 1;
+        hb.left += 1;
+        hb.width -= 2;
+        hb.height += 2;
 
         return this->isColliding<Block>(hb, { Pos::Top, Pos::TopL, Pos::TopR });
     };
@@ -97,8 +110,17 @@ public:
     ABlock* isCollidingB(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
-        hb.height += 1;
+        hb.top -= 1;
+        hb.left += 1;
+        hb.width -= 2;
+        hb.height += 2;
 
         return this->isColliding<Block>(hb, { Pos::Bot, Pos::BotL, Pos::BotR });
+    };
+
+    template <typename Block>
+    ABlock* isOn(const sf::FloatRect& hb)
+    {
+        return this->isColliding<Block>(hb, { Pos::Head, Pos::Legs });
     };
 };

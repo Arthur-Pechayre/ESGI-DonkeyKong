@@ -20,7 +20,6 @@ private:
     Map                         map;
 
     static const sf::Time	    TimePerFrame; // Todo move in const.h
-    static const float          GRAVITY; // Todo move in const.h
 
     sf::Font	                font; // Todo move in ressource manager
     sf::Text	                statisticsText; // Todo make ui 
@@ -30,8 +29,12 @@ private:
     bool                        isMovingDown;
     bool                        isMovingRight;
     bool                        isMovingLeft;
+    bool                        isJumping;
 
 public:
+    static const float          GRAVITY; // Todo move in const.h
+    static const float          FRICTION; // Todo move in const.h
+
     Game(const RessourcesManager&);
 	~Game() {};
 	void run();

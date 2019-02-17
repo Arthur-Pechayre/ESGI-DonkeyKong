@@ -15,6 +15,8 @@ public:
     int                 facing;
     bool                facingChanged;
 
+    sf::Vector2f        velocity;
+
 public:
     Player(const RessourcesManager&);
     ~Player();

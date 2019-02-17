@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ABlock.h"
-#include "ASolidBlock.hpp"
+#include "ASolidBlock.h"
 #include "RessourcesManager.h"
 #include <random>
 

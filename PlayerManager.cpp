@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PlayerManager.h"
+#include "Game.h"
 
 PlayerManager::PlayerManager(const RessourcesManager& manager) :
     player(manager),
@@ -11,10 +12,10 @@ PlayerManager::~PlayerManager()
 {
 }
 
-void PlayerManager::updateFacing(const sf::Vector2f& movement)
+void PlayerManager::updateFacing()
 {
     int prevFacing = this->player.facing;
-    this->player.facing = movement.x == 0 ? this->player.facing : movement.x > 0 ? Player::FACING_RIGHT : Player::FACING_LEFT;
+    this->player.facing = this->player.velocity.x == 0 ? this->player.facing : this->player.velocity.x > 0 ? Player::FACING_RIGHT : Player::FACING_LEFT;
     this->player.facingChanged = prevFacing != this->player.facing;
 }
 
@@ -23,37 +24,64 @@ void PlayerManager::updateSurroundings(const Map& map)
     this->playerSurroundings.update(this->player, map);
 }
 
-void PlayerManager::applyMovementConstraints(sf::Vector2f& movement, const sf::Time& elapsedTime)
+void PlayerManager::move(sf::Vector2f& acceleration, const sf::Time& elapsedTime, bool jumping)
+{    
+    this->player.velocity += acceleration;
+    if (!jumping && abs(this->player.velocity.y) > Player::MAX_Y_SPEED) {
+        this->player.velocity.y = this->player.velocity.y > 0 ? Player::MAX_Y_SPEED : -Player::MAX_Y_SPEED;
+    }
+    this->applyGravity();
+    this->applyFriction();
+    this->handleCollisions(elapsedTime);
+    if (abs(this->player.velocity.x) > Player::MAX_X_SPEED) {
+        this->player.velocity.x = this->player.velocity.x > 0 ? Player::MAX_X_SPEED : -Player::MAX_X_SPEED;
+    }
+
+    this->updateFacing();
+    this->player.move(player.velocity * elapsedTime.asSeconds());
+}
+
+void PlayerManager::handleCollisions(const sf::Time& elapsedTime)
 {
     sf::FloatRect futurePos(this->player.getGlobalBounds());
-    ABlock* b;
+    futurePos.left += player.velocity.x * elapsedTime.asSeconds();
+    futurePos.top += player.velocity.y * elapsedTime.asSeconds();
 
-    if (movement.x > 0) { // RIGHT
-        movement.x = movement.x > Player::MAX_X_SPEED ? Player::MAX_X_SPEED : movement.x;
-        futurePos.left += movement.x * elapsedTime.asSeconds();
+    auto t = this->playerSurroundings.isCollidingT<ASolidBlock>(futurePos);
+    auto b = this->playerSurroundings.isCollidingB<ASolidBlock>(futurePos);
+    auto l = this->playerSurroundings.isCollidingL<ASolidBlock>(futurePos);
+    auto r = this->playerSurroundings.isCollidingR<ASolidBlock>(futurePos);
 
-        b = this->playerSurroundings.isCollidingR<ASolidBlock>(futurePos);
-        movement.x = !b ? movement.x : abs(b->getGlobalBounds().left - this->player.right()) / elapsedTime.asSeconds();
+    if (player.velocity.x > 0) {
+        player.velocity.x = !r ? player.velocity.x : abs(r->getGlobalBounds().left - this->player.right()) / elapsedTime.asSeconds();
+    } else if (player.velocity.x < 0) {
+        player.velocity.x = !l ? player.velocity.x : -1 * abs(l->getGlobalBounds().left + l->getGlobalBounds().width - this->player.left()) / elapsedTime.asSeconds();
     }
-    else if (movement.x < 0) { // LEFT
-        movement.x = movement.x < -Player::MAX_X_SPEED ? -Player::MAX_X_SPEED : movement.x;
-        futurePos.left += movement.x * elapsedTime.asSeconds();
-
-        b = this->playerSurroundings.isCollidingL<ASolidBlock>(futurePos);
-        movement.x = !b ? movement.x : -1 * abs(b->getGlobalBounds().left + b->getGlobalBounds().width - this->player.left()) / elapsedTime.asSeconds();
+    if (player.velocity.y > 0) {
+        player.velocity.y = !b ? player.velocity.y : abs(b->getGlobalBounds().top - this->player.bot()) / elapsedTime.asSeconds();
     }
-    if (movement.y > 0) { // BOT
-        movement.y = movement.y > Player::MAX_Y_SPEED ? Player::MAX_Y_SPEED : movement.y;
-        futurePos.top += movement.y * elapsedTime.asSeconds();
-
-        b = this->playerSurroundings.isCollidingB<ASolidBlock>(futurePos);
-        movement.y = !b ? movement.y : abs(b->getGlobalBounds().top - this->player.bot()) / elapsedTime.asSeconds();
+    else if (player.velocity.y < 0) {
+        player.velocity.y = !t ? player.velocity.y : -1 * abs(t->getGlobalBounds().top + t->getGlobalBounds().height - this->player.top()) / elapsedTime.asSeconds();
     }
-    else if (movement.y < 0) { // TOP
-        movement.y = movement.y < -Player::MAX_Y_SPEED ? -Player::MAX_Y_SPEED : movement.y;
-        futurePos.top += movement.y * elapsedTime.asSeconds();
+}
 
-        b = this->playerSurroundings.isCollidingT<ASolidBlock>(futurePos);
-        movement.y = !b ? movement.y : -1 * abs(b->getGlobalBounds().top + b->getGlobalBounds().height - this->player.top()) / elapsedTime.asSeconds();
-    }
+ABlock* PlayerManager::isOnLadder()
+{
+    return this->playerSurroundings.isOn<LadderBlock>(this->player.getGlobalBounds());
+}
+
+ABlock* PlayerManager::isGrounded()
+{
+    return this->playerSurroundings.isCollidingB<ASolidBlock>(this->player.getGlobalBounds());
+}
+
+void PlayerManager::applyFriction()
+{
+    this->player.velocity.x *= this->isGrounded() || this->isOnLadder() ? 0.84 : 1;
+    this->player.velocity.y *= this->isOnLadder() ? 0.75 : 1;
+}
+
+void PlayerManager::applyGravity()
+{
+    this->player.velocity.y += this->isOnLadder() ? 0 : Game::GRAVITY;
 }

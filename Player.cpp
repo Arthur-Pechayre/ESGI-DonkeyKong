@@ -1,15 +1,17 @@
 #include "pch.h"
 #include "Player.h"
+#include "Const.h"
 
-const float Player::SPEED = 150;
-const float Player::MAX_X_SPEED = 150;
-const float Player::MAX_Y_SPEED = 200;
+const float Player::SPEED = PLAYER_SPEED;
+const float Player::MAX_X_SPEED = PLAYER_MAX_SPEED_X;
+const float Player::MAX_Y_SPEED = PLAYER_MAX_SPEED_Y;
 const int Player::FACING_RIGHT = 1;
 const int Player::FACING_LEFT = -1;
 
-Player::Player(const RessourcesManager& manager):
-facingChanged(false),
-facing(FACING_RIGHT)
+Player::Player(const RessourcesManager& manager) :
+    facingChanged(false),
+    facing(FACING_RIGHT),
+    velocity(0, 0)
 {
     this->setTexture(manager.T_MAP.at(RessourcesManager::Tids::Eplayer));
 }

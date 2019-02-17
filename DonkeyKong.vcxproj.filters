@@ -54,9 +54,6 @@
     <ClInclude Include="StonebrickBlock.h">
       <Filter>Header Files\Blocks</Filter>
     </ClInclude>
-    <ClInclude Include="ASolidBlock.hpp">
-      <Filter>Header Files\Blocks</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerSurroundings.hpp">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
@@ -68,6 +65,18 @@
     </ClInclude>
     <ClInclude Include="AEntity.h">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="LadderBlock.h">
+      <Filter>Header Files\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="BedrockBlock.h">
+      <Filter>Header Files\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="ASolidBlock.h">
+      <Filter>Header Files\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Const.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +115,12 @@
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
       <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="LadderBlock.cpp">
+      <Filter>Source Files\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="BedrockBlock.cpp">
+      <Filter>Source Files\Blocks</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

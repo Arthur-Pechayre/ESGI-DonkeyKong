@@ -16,7 +16,12 @@ private:
 public:
     PlayerManager(const RessourcesManager&);
     ~PlayerManager();
-    void updateSurroundings(const Map&);
-    void updateFacing(const sf::Vector2f& movement);
-    void applyMovementConstraints(sf::Vector2f&, const sf::Time&);
+    void    updateSurroundings(const Map&);
+    void    updateFacing();
+    void    move(sf::Vector2f&, const sf::Time&, bool);
+    void    handleCollisions(const sf::Time&);
+    void    applyFriction();
+    void    applyGravity();
+    ABlock* isOnLadder();
+    ABlock* isGrounded();
 };

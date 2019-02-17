@@ -1,14 +1,15 @@
 #include "pch.h"
 #include "Game.h"
 
-const float Game::GRAVITY = 200;
+const float Game::GRAVITY = 60;
+const float Game::FRICTION = FRICTION;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game(const RessourcesManager& manager):
     window(sf::VideoMode(1024, 720), "Donkey Kong 1981", sf::Style::Close),
     ressourcesManager(manager),
-    playerManager(manager),
     map(manager),
+    playerManager(manager),
     font(),
     statisticsText(),
     statisticsUpdateTime(),
@@ -21,6 +22,7 @@ Game::Game(const RessourcesManager& manager):
     this->window.setFramerateLimit(120);
 
     this->map.loadMap();
+    this->playerManager.player.setPosition(this->map.initPlayerPos);
 
 	// Draw Statistic Font 
     this->font.loadFromFile("Media/Sansation.ttf");
@@ -72,25 +74,35 @@ void Game::processEvents()
 void Game::updatePlayer(const sf::Time& elapsedTime)
 {
     this->playerManager.updateSurroundings(this->map);
-    sf::Vector2f movement(0.f, 0.f);
 
-    if (this->isMovingUp /*&& isOnLadder*/) {
-        movement.y -= Player::SPEED + Game::GRAVITY;
+    sf::Vector2f acceleration(
+        this->isMovingLeft && this->isMovingRight ? 0 :
+            this->isMovingLeft ? -Player::SPEED :
+            this->isMovingRight ? Player::SPEED : 
+            0,
+        0.f
+    );
+    ABlock* onLadder = this->playerManager.isOnLadder();
+    bool jumping = false;
+
+    if (this->isMovingUp && onLadder) {
+        acceleration.y -= Player::SPEED;
     }
-    movement.y += /*isOnLadder ? 0 :*/ Game::GRAVITY;
     if (this->isMovingDown) {
-        movement.y += Player::SPEED;
-    }
-    if (this->isMovingLeft) {
-        movement.x -= Player::SPEED;
-    }
-    if (this->isMovingRight) {
-        movement.x += Player::SPEED;
+        acceleration.y += Player::SPEED;
     }
 
-    this->playerManager.applyMovementConstraints(movement, elapsedTime);
-    this->playerManager.updateFacing(movement);
-    this->playerManager.player.move(movement * elapsedTime.asSeconds());
+    // Prevent diagonal movements from being longer
+    if (acceleration.x && acceleration.y) {
+        acceleration /= std::sqrt(2.f);
+    }
+
+    if (this->isJumping && !onLadder && this->playerManager.isGrounded()) {
+        acceleration.y -= Game::GRAVITY + (Player::SPEED * 4);
+        jumping = true;
+    }
+
+    this->playerManager.move(acceleration, elapsedTime, jumping);
 }
 
 void Game::update(const sf::Time& elapsedTime)
@@ -138,5 +150,6 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
     }
         
 	if (key == sf::Keyboard::Space) {
+        this->isJumping = isPressed;
 	}
 }

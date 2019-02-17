@@ -7,6 +7,8 @@
 #include "ABlock.h"
 #include "StonebrickBlock.h"
 #include "AirBlock.h"
+#include "LadderBlock.h"
+#include "BedrockBlock.h"
 
 class BlockGenerator
 {
@@ -25,7 +27,12 @@ private:
 public:
     BlockGenerator()
     {
+        // Entities spawn blocks
+        this->RegisterBlock<AirBlock>('P'); // Player
+
         this->RegisterBlock<StonebrickBlock>('s');
+        this->RegisterBlock<BedrockBlock>(0);
+        this->RegisterBlock<LadderBlock>('l');
         this->RegisterBlock<AirBlock>(' ');
     }
 

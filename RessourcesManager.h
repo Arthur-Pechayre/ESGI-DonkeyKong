@@ -9,6 +9,8 @@ public:
         Bstonebrick_mossy,
         Bstonebrick_craked,
         Bair,
+        Bladder,
+        Bbedrock,
         Eplayer
     };
 
