@@ -10,7 +10,8 @@ const std::map<RessourcesManager::Tids, std::string> RessourcesManager::T_PATHS 
     {Bladder, ASSETS_PATH"/Blocks/ladder.png"},
     {Bbedrock, ASSETS_PATH"/Blocks/bedrock.png"},
     {Bair, ""},
-    {Eplayer, ASSETS_PATH"/Entities/steve.png"}
+    {Eplayer, ASSETS_PATH"/Entities/steve.png"},
+    {Ediamond, ASSETS_PATH"/Entities/diamond.png"},
 };
 
 RessourcesManager::RessourcesManager() :

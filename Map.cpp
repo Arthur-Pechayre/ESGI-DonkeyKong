@@ -4,9 +4,11 @@
 Map::Map(const RessourcesManager& manager) :
     ressourcesManager{&manager},
     initializersMap(),
+    initDiamondsPos(),
     size(0, 0)
 {
     this->initializersMap.insert(std::pair<char, EntityPositionInitializer>('P', &Map::initPlayerOnBlock));
+    this->initializersMap.insert(std::pair<char, EntityPositionInitializer>('c', &Map::initDiamondOnBlock));
 }
 
 void Map::draw(sf::RenderWindow& w)
@@ -24,7 +26,7 @@ void Map::loadMap()
 
     std::vector<std::string> map = {
         "                ",
-        "    l           ",
+        " c  l           ",
         "ssssl           ",
         "    l    P      ",
         "    l           ",
@@ -32,18 +34,18 @@ void Map::loadMap()
         "    l           ",
         "    l           ",
         "    l           ",
+        "    l    c      ",
         "    l           ",
         "    l           ",
+        " c  l           ",
         "    l           ",
         "    l           ",
-        "    l           ",
-        "    l           ",
-        "    l           ",
+        "    l c  c    c ",
         "    lssss  s ss ",
         "    l           ",
         "    l           ",
         "    l           ",
-        "    l  ss       ",
+        " c cl  ss       ",
         "ssssssssssssssss",
     };
 
@@ -90,6 +92,11 @@ void Map::initPlayerOnBlock(const ABlock* block)
 {
     this->initPlayerPos = block->getPosition();
     ++this->initPlayerPos.y;
+}
+
+void Map::initDiamondOnBlock(const ABlock* block)
+{
+    this->initDiamondsPos.push_back(sf::Vector2f(block->getPosition()));
 }
 
 void Map::initEntitiesPositions(const char& c, const ABlock* block)

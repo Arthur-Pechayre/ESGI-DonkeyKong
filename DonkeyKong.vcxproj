@@ -162,6 +162,8 @@
     <ClInclude Include="BedrockBlock.h" />
     <ClInclude Include="BlockGenerator.hpp" />
     <ClInclude Include="Const.h" />
+    <ClInclude Include="DiamondEntity.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="LadderBlock.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PlayerSurroundings.hpp" />

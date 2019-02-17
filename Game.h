@@ -2,6 +2,7 @@
 
 #include "RessourcesManager.h"
 #include "PlayerManager.h"
+#include "EntityManager.h"
 #include "StringHelpers.h"
 #include "Map.h"
 

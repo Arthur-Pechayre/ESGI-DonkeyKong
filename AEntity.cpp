@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "AEntity.h"
 
-AEntity::AEntity() :
-    sf::Sprite()
+AEntity::AEntity(const RessourcesManager& manager, const RessourcesManager::Tids& tid) :
+    sf::Sprite(),
+    _tid(tid)
 {
+    this->setTexture(manager.T_MAP.at(this->_tid));
 }
 
 void AEntity::draw(sf::RenderWindow& w)

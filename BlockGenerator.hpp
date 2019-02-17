@@ -29,6 +29,7 @@ public:
     {
         // Entities spawn blocks
         this->RegisterBlock<AirBlock>('P'); // Player
+        this->RegisterBlock<AirBlock>('c'); // Diamond
 
         this->RegisterBlock<StonebrickBlock>('s');
         this->RegisterBlock<BedrockBlock>(0);

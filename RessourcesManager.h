@@ -11,7 +11,8 @@ public:
         Bair,
         Bladder,
         Bbedrock,
-        Eplayer
+        Eplayer,
+        Ediamond
     };
 
     const static std::map<RessourcesManager::Tids, std::string> T_PATHS;

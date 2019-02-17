@@ -11,12 +11,12 @@ const int Player::FACING_RIGHT = 1;
 const int Player::FACING_LEFT = -1;
 
 Player::Player(const RessourcesManager& manager) :
+    AEntity(manager, RessourcesManager::Tids::Eplayer),
     facingChanged(false),
     facing(FACING_RIGHT),
     velocity(0, 0),
     jumpCooldown(sf::Time::Zero)
 {
-    this->setTexture(manager.T_MAP.at(RessourcesManager::Tids::Eplayer));
 }
 
 Player::~Player()

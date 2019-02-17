@@ -10,6 +10,8 @@ Game::Game(const RessourcesManager& manager):
     ressourcesManager(manager),
     map(manager),
     playerManager(manager),
+    entityManager(manager),
+    score(),
     font(),
     statisticsText(),
     statisticsUpdateTime(),
@@ -23,6 +25,7 @@ Game::Game(const RessourcesManager& manager):
 
     this->map.loadMap();
     this->playerManager.player.setPosition(this->map.initPlayerPos);
+    this->entityManager.initDiamonds(this->map.initDiamondsPos);
 
 	// Draw Statistic Font 
     this->font.loadFromFile("Media/Sansation.ttf");
@@ -115,6 +118,7 @@ void Game::render()
     this->window.clear();
 
     this->map.draw(window);
+    this->entityManager.draw(window);
     this->playerManager.player.draw(window);
     this->window.draw(this->statisticsText);
 

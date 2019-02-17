@@ -1,9 +1,14 @@
 #pragma once
 
+#include "RessourcesManager.h"
+
 class AEntity : public sf::Sprite
 {
+private:
+    const RessourcesManager::Tids _tid;
+
 public:
-    AEntity();
+    AEntity(const RessourcesManager&, const RessourcesManager::Tids&);
     virtual ~AEntity() {};
 
     virtual void draw(sf::RenderWindow&);
