@@ -6,7 +6,7 @@ const float Game::FRICTION = FRICTION;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game(const RessourcesManager& manager):
-    window(sf::VideoMode(1024, 720), "Donkey Kong 1981", sf::Style::Close),
+    window(sf::VideoMode(1920, 1080), "Donkey Kong 1981", sf::Style::Close + sf::Style::Resize),
     ressourcesManager(manager),
     map(manager),
     playerManager(manager),
