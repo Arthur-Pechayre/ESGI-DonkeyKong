@@ -12,7 +12,8 @@ public:
         Bladder,
         Bbedrock,
         Eplayer,
-        Ediamond
+        Ediamond,
+        score_bg
     };
 
     const static std::map<RessourcesManager::Tids, std::string> T_PATHS;

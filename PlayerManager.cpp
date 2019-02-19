@@ -28,9 +28,9 @@ void PlayerManager::updateJumpingCD(bool jumping, const sf::Time& elapsedTime)
     }
 }
 
-void PlayerManager::updateSurroundings(const Map& map)
+void PlayerManager::update(const Map& map, const EntityManager& e)
 {
-    this->playerSurroundings.update(this->player, map);
+    this->playerSurroundings.update(this->player, map, e);
 }
 
 void PlayerManager::move(sf::Vector2f& acceleration, const sf::Time& elapsedTime, bool jumping)
@@ -101,4 +101,9 @@ void PlayerManager::applyFriction()
 void PlayerManager::applyGravity()
 {
     this->player.velocity.y += this->isOnLadder() ? 0 : Game::GRAVITY;
+}
+
+std::vector<DiamondEntity*> PlayerManager::collectDiamonds()
+{
+    return this->playerSurroundings.touchingEntities<DiamondEntity>(this->player.getGlobalBounds());
 }

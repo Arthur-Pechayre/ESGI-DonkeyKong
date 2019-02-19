@@ -40,7 +40,7 @@ public:
 private:
     void processEvents();
     void update(const sf::Time&);
-    void updatePlayer(const sf::Time&);
+    void updatePlayerPosition(const sf::Time&);
     void render();
 
     void updateStatistics(sf::Time elapsedTime);

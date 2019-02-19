@@ -36,3 +36,8 @@ void Player::draw(sf::RenderWindow& w)
 
     w.draw(*this);
 }
+
+sf::Vector2i Player::getGridPosition() const
+{
+    return (sf::Vector2i(round(this->left() / 32), round(this->top() / 32) + 1));
+}

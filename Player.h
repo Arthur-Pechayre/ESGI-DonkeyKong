@@ -24,4 +24,5 @@ public:
     Player(const RessourcesManager&);
     ~Player();
     void draw(sf::RenderWindow&);
+    sf::Vector2i getGridPosition() const;
 };

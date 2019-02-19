@@ -12,6 +12,7 @@ const std::map<RessourcesManager::Tids, std::string> RessourcesManager::T_PATHS 
     {Bair, ""},
     {Eplayer, ASSETS_PATH"/Entities/steve.png"},
     {Ediamond, ASSETS_PATH"/Entities/diamond.png"},
+    {score_bg, ASSETS_PATH"/score_bg.png"},
 };
 
 RessourcesManager::RessourcesManager() :

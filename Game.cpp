@@ -11,7 +11,7 @@ Game::Game(const RessourcesManager& manager):
     map(manager),
     playerManager(manager),
     entityManager(manager),
-    score(),
+    score(manager),
     font(),
     statisticsText(),
     statisticsUpdateTime(),
@@ -26,14 +26,15 @@ Game::Game(const RessourcesManager& manager):
     this->map.loadMap();
     this->playerManager.player.setPosition(this->map.initPlayerPos);
     this->entityManager.initDiamonds(this->map.initDiamondsPos);
+    this->score.init(&this->playerManager.player, &this->font, &this->window.getSize());
 
 	// Draw Statistic Font 
     this->font.loadFromFile("Media/Sansation.ttf");
-    this->statisticsText.setString("Welcome to Donkey Kong 1981");
     this->statisticsText.setFont(this->font);
     this->statisticsText.setPosition(5.f, 5.f);
     this->statisticsText.setCharacterSize(10);
 }
+
 
 void Game::run()
 {
@@ -74,9 +75,9 @@ void Game::processEvents()
 	}
 }
 
-void Game::updatePlayer(const sf::Time& elapsedTime)
+void Game::updatePlayerPosition(const sf::Time& elapsedTime)
 {
-    this->playerManager.updateSurroundings(this->map);
+    this->playerManager.update(this->map, this->entityManager);
 
     sf::Vector2f acceleration(
         this->isMovingLeft && this->isMovingRight ? 0 :
@@ -108,9 +109,15 @@ void Game::updatePlayer(const sf::Time& elapsedTime)
     this->playerManager.move(acceleration, elapsedTime, jumping);
 }
 
+
+
 void Game::update(const sf::Time& elapsedTime)
 {
-    this->updatePlayer(elapsedTime);
+    this->playerManager.update(this->map, this->entityManager);
+    this->updatePlayerPosition(elapsedTime);
+    auto diams = this->playerManager.collectDiamonds();
+    //printf("diams : %d\n", diams.size());
+    this->score.diamonds += this->entityManager.updateDiamonds(this->playerManager.collectDiamonds());
 }
 
 void Game::render()
@@ -120,6 +127,7 @@ void Game::render()
     this->map.draw(window);
     this->entityManager.draw(window);
     this->playerManager.player.draw(window);
+    this->score.draw(window);
     this->window.draw(this->statisticsText);
 
     this->window.display();

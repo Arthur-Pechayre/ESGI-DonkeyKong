@@ -5,6 +5,7 @@
 #include "ABlock.h"
 #include "Map.h"
 #include "Player.h"
+#include "EntityManager.h"
 
 class PlayerSurroundings
 {
@@ -24,7 +25,8 @@ public:
         Head,
         Legs
     };
-    std::vector<ABlock*>    blocks;
+    std::vector<ABlock*>                 blocks;
+    std::vector<std::vector<AEntity*>>   entities;
 
 private:
     template <typename Block>
@@ -40,14 +42,16 @@ private:
 
 public:
     PlayerSurroundings() :
-        blocks(12, nullptr)
+        blocks(12, nullptr),
+        entities(12)
     {
     };
 
     ~PlayerSurroundings() {};
 
-    void update(const Player& player, const Map& map)
+    void update(const Player& player, const Map& map, const EntityManager& e)
     {
+        auto pos = player.getGridPosition();
         int x = round(player.left() / 32);
         int y = round(player.top() / 32) + 1;
         unsigned int bot = y + 1;
@@ -56,6 +60,7 @@ public:
         int head = y - 1;
         int top = y - 2;
 
+        // Update blocks
         this->blocks[Pos::BotL] = bot > map.size.y || left < 0 ? nullptr : map.tileMap[bot][left];
         this->blocks[Pos::Bot] = bot > map.size.y ? nullptr : map.tileMap[bot][x];
         this->blocks[Pos::BotR] = bot > map.size.y || right > map.size.x ? nullptr : map.tileMap[bot][right];
@@ -64,10 +69,26 @@ public:
         this->blocks[Pos::MiddleBotR] = right > map.size.x ? nullptr : map.tileMap[y][right];
         this->blocks[Pos::Head] = map.tileMap[head][x];
         this->blocks[Pos::MiddleTopL] = head < 0 || left < 0 ? nullptr : map.tileMap[head][left];
-        this->blocks[Pos::MiddleTopR] = head < 0 || right > map.size.x ? nullptr : map.tileMap[y - 1][right];
+        this->blocks[Pos::MiddleTopR] = head < 0 || right > map.size.x ? nullptr : map.tileMap[head][right];
         this->blocks[Pos::TopL] = top < 0 || left < 0 ? nullptr : map.tileMap[top][left];
         this->blocks[Pos::Top] = top < 0 ? nullptr : map.tileMap[top][x];
         this->blocks[Pos::TopR] = top < 0 || right > map.size.x ? nullptr : map.tileMap[top][right];    
+
+        // Update entities
+        //this->entities[Pos::BotL] = e.getEntitiesAt(bot, left);
+        //this->entities[Pos::Bot] = e.getEntitiesAt(bot, x);
+        //this->entities[Pos::BotR] = e.getEntitiesAt(bot, right);
+        this->entities[Pos::Legs] = e.getEntitiesAt(y, x);
+        // this->entities[Pos::MiddleBotL] = e.getEntitiesAt(y, left);
+        // this->entities[Pos::MiddleBotR] = e.getEntitiesAt(y, right);
+        this->entities[Pos::Head] = e.getEntitiesAt(head, x);
+        // this->entities[Pos::MiddleTopL] = e.getEntitiesAt(head, left);
+        // this->entities[Pos::MiddleTopR] = e.getEntitiesAt(head, right);
+        // this->entities[Pos::TopL] = e.getEntitiesAt(top, left);
+        // this->entities[Pos::Top] = e.getEntitiesAt(top, x);
+        // this->entities[Pos::TopR] = e.getEntitiesAt(top, right);
+
+        //printf("%d diam at %d %d\n", this->entities[Pos::Legs].size(), this->entities[Pos::Head].size(), x, y);
     };
 
     template <typename Block>
@@ -122,5 +143,24 @@ public:
     ABlock* isOn(const sf::FloatRect& hb)
     {
         return this->isColliding<Block>(hb, { Pos::Head, Pos::Legs });
+    };
+
+    template <typename Entity>
+    std::vector<Entity*> touchingEntities(const sf::FloatRect& hb)
+    {
+        std::vector<Entity*> res;
+
+        for (auto i : { Pos::Head, Pos::Legs }) {
+            for (auto e : this->entities[i]) {
+                if (e->getGlobalBounds().intersects(hb)) {
+                    Entity* entityColliding = dynamic_cast<Entity*>(e);
+                    if (entityColliding) {
+                        res.push_back(entityColliding);
+                    }
+                }
+            }
+        }
+
+        return res;
     };
 };

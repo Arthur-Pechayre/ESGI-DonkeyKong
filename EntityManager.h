@@ -6,7 +6,8 @@
 
 class EntityManager
 {
-    typedef std::map<int, std::map<int, DiamondEntity*>> DiamondEntityMap;
+    typedef std::map<int, DiamondEntity*>           DiamondEntityMapEntry;
+    typedef std::map<int, DiamondEntityMapEntry>    DiamondEntityMap;
 
 private:
     const RessourcesManager*    ressourcesManager;
@@ -16,7 +17,9 @@ private:
 public:
     EntityManager(const RessourcesManager&);
     ~EntityManager() {};
-    void initDiamonds(const std::vector<sf::Vector2f>&);
-    void draw(sf::RenderWindow&);
+    void                    initDiamonds(const std::vector<sf::Vector2f>&);
+    void                    draw(sf::RenderWindow&);
+    std::vector<AEntity*>   getEntitiesAt(int y, int x) const;
+    int                     updateDiamonds(std::vector<DiamondEntity*>);
 };
 

@@ -42,3 +42,8 @@ float AEntity::right() const
 {
     return this->getGlobalBounds().left + this->width();
 }
+
+sf::Vector2i AEntity::getGridPosition() const
+{
+    return (sf::Vector2i(round(this->left() / 32), round(this->top() / 32)));
+}
