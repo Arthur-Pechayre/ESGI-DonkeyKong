@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Game.h"
 
-const float Game::GRAVITY = 60;
-const float Game::FRICTION = FRICTION;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game(const RessourcesManager& manager):
@@ -10,7 +8,7 @@ Game::Game(const RessourcesManager& manager):
     ressourcesManager(manager),
     map(manager),
     playerManager(manager),
-    entityManager(manager),
+    entityManager(manager, map),
     score(manager),
     font(),
     statisticsText(),
@@ -27,6 +25,7 @@ Game::Game(const RessourcesManager& manager):
     this->playerManager.player.setPosition(this->map.initPlayerPos);
     this->entityManager.initDiamonds(this->map.initDiamondsPos);
     this->score.init(&this->playerManager.player, &this->font, &this->window.getSize());
+    this->entityManager.spawners = this->map.spawners;
 
 	// Draw Statistic Font 
     this->font.loadFromFile("Media/Sansation.ttf");
@@ -102,21 +101,22 @@ void Game::updatePlayerPosition(const sf::Time& elapsedTime)
     }
 
     if (this->isJumping && !onLadder && this->playerManager.canJump()) {
-        acceleration.y -= Game::GRAVITY + Player::JUMP_FORCE;
+        acceleration.y -= GRAVITY + Player::JUMP_FORCE;
         jumping = true;
     }
 
     this->playerManager.move(acceleration, elapsedTime, jumping);
 }
 
-
-
 void Game::update(const sf::Time& elapsedTime)
 {
     this->playerManager.update(this->map, this->entityManager);
     this->updatePlayerPosition(elapsedTime);
+
+    this->entityManager.spawnPufferfishs(elapsedTime);
+    this->entityManager.updatePufferfishs(elapsedTime);
+
     auto diams = this->playerManager.collectDiamonds();
-    //printf("diams : %d\n", diams.size());
     this->score.diamonds += this->entityManager.updateDiamonds(this->playerManager.collectDiamonds());
 }
 
@@ -128,6 +128,7 @@ void Game::render()
     this->entityManager.draw(window);
     this->playerManager.player.draw(window);
     this->score.draw(window);
+
     this->window.draw(this->statisticsText);
 
     this->window.display();

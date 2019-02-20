@@ -4,15 +4,20 @@
 
 class AEntity : public sf::Sprite
 {
+public:
+    static const int    FACING_RIGHT = 1;
+    static const int    FACING_LEFT = -1;
+    sf::Vector2f        velocity;
+
 private:
     const RessourcesManager::Tids _tid;
 
 public:
     AEntity(const RessourcesManager&, const RessourcesManager::Tids&);
-    virtual ~AEntity() {};
-
-    virtual void draw(sf::RenderWindow&);
-
+    virtual ~AEntity() {}
+    virtual void            draw(sf::RenderWindow&);
+    int                     facing;
+    bool                    facingChanged;
     float                   width() const;
     float                   height() const;
     float                   top() const;

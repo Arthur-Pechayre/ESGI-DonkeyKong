@@ -6,7 +6,7 @@ class LadderBlock :
     public ABlock
 {
 public:
-    LadderBlock(const RessourcesManager&);
+    LadderBlock(const RessourcesManager&, const char&, const sf::Vector2f&);
     ~LadderBlock() {};
 };
 

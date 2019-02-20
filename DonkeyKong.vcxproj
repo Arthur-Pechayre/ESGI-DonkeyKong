@@ -167,6 +167,8 @@
     <ClInclude Include="LadderBlock.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PlayerSurroundings.hpp" />
+    <ClInclude Include="PufferfishEntity.h" />
+    <ClInclude Include="PufferfishSpawnerBlock.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="StonebrickBlock.h" />
     <ClInclude Include="Game.h" />
@@ -185,6 +187,8 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="LadderBlock.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
+    <ClCompile Include="PufferfishEntity.cpp" />
+    <ClCompile Include="PufferfishSpawnerBlock.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="StonebrickBlock.cpp" />
     <ClCompile Include="DonkeyKong.cpp" />

@@ -52,8 +52,8 @@ public:
     void update(const Player& player, const Map& map, const EntityManager& e)
     {
         auto pos = player.getGridPosition();
-        int x = round(player.left() / 32);
-        int y = round(player.top() / 32) + 1;
+        int x = pos.x;
+        int y = pos.y;
         unsigned int bot = y + 1;
         unsigned int right = x + 1;
         int left = x - 1;
@@ -75,20 +75,8 @@ public:
         this->blocks[Pos::TopR] = top < 0 || right > map.size.x ? nullptr : map.tileMap[top][right];    
 
         // Update entities
-        //this->entities[Pos::BotL] = e.getEntitiesAt(bot, left);
-        //this->entities[Pos::Bot] = e.getEntitiesAt(bot, x);
-        //this->entities[Pos::BotR] = e.getEntitiesAt(bot, right);
         this->entities[Pos::Legs] = e.getEntitiesAt(y, x);
-        // this->entities[Pos::MiddleBotL] = e.getEntitiesAt(y, left);
-        // this->entities[Pos::MiddleBotR] = e.getEntitiesAt(y, right);
         this->entities[Pos::Head] = e.getEntitiesAt(head, x);
-        // this->entities[Pos::MiddleTopL] = e.getEntitiesAt(head, left);
-        // this->entities[Pos::MiddleTopR] = e.getEntitiesAt(head, right);
-        // this->entities[Pos::TopL] = e.getEntitiesAt(top, left);
-        // this->entities[Pos::Top] = e.getEntitiesAt(top, x);
-        // this->entities[Pos::TopR] = e.getEntitiesAt(top, right);
-
-        //printf("%d diam at %d %d\n", this->entities[Pos::Legs].size(), this->entities[Pos::Head].size(), x, y);
     };
 
     template <typename Block>

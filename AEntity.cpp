@@ -1,8 +1,12 @@
 #include "pch.h"
+
 #include "AEntity.h"
 
 AEntity::AEntity(const RessourcesManager& manager, const RessourcesManager::Tids& tid) :
     sf::Sprite(),
+    facing(AEntity::FACING_LEFT),
+    facingChanged(false),
+    velocity(0, 0),
     _tid(tid)
 {
     this->setTexture(manager.T_MAP.at(this->_tid));
@@ -10,6 +14,15 @@ AEntity::AEntity(const RessourcesManager& manager, const RessourcesManager::Tids
 
 void AEntity::draw(sf::RenderWindow& w)
 {
+    if (this->facingChanged) {
+        sf::Vector2f movement(0.f, 0.f);
+
+        movement.x += this->facing * -this->getGlobalBounds().width;
+        this->move(movement);
+        this->facingChanged = false;
+        this->scale(-1, 1);
+    }
+
     w.draw(*this);
 }
 

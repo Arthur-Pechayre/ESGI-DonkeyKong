@@ -11,8 +11,10 @@ public:
         Bair,
         Bladder,
         Bbedrock,
+        Bpufferfish_spawner,
         Eplayer,
         Ediamond,
+        Epufferfish,
         score_bg
     };
 

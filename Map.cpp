@@ -5,10 +5,13 @@ Map::Map(const RessourcesManager& manager) :
     ressourcesManager{&manager},
     initializersMap(),
     initDiamondsPos(),
+    spawners(),
     size(0, 0)
 {
     this->initializersMap.insert(std::pair<char, EntityPositionInitializer>('P', &Map::initPlayerOnBlock));
     this->initializersMap.insert(std::pair<char, EntityPositionInitializer>('c', &Map::initDiamondOnBlock));
+    this->initializersMap.insert(std::pair<char, EntityPositionInitializer>('<', &Map::registerSpawner));
+    this->initializersMap.insert(std::pair<char, EntityPositionInitializer>('>', &Map::registerSpawner));
 }
 
 void Map::draw(sf::RenderWindow& w)
@@ -36,14 +39,14 @@ void Map::loadMap()
         "    l           ",
         "    l           ",
         "    l           ",
+        "    l<          ",
+        "    lsssssssssss",
         "    l           ",
         "    l           ",
         "    l           ",
+        "sssslssssssss  s",
         "    l           ",
-        "    l           ",
-        "    l           ",
-        "    l           ",
-        "    l           ",
+        "sssslsssssssssss",
         "    l    c      ",
         "    l           ",
         "    l           ",
@@ -64,9 +67,8 @@ void Map::loadMap()
         std::vector<ABlock*> b;
         
         for (int x = 1; x < map[y - 1].size() + 1; ++x) {
-            ABlock* neoBlock = bg.CreateBlock(map[y - 1][x - 1], *ressourcesManager);
+            ABlock* neoBlock = bg.CreateBlock(map[y - 1][x - 1], *ressourcesManager, sf::Vector2f((float)(x * 32), (float)(y * 32)));
 
-            neoBlock->setPosition((float)(x * 32), (float)(y * 32));
             this->initEntitiesPositions(map[y - 1][x - 1], neoBlock);
             
             b.insert(b.end(), neoBlock);
@@ -81,15 +83,14 @@ void Map::loadMap()
         if (y == 0 || y == this->size.y - 1) {
             std::vector<ABlock*> b;
             for (int x = 0; x < this->size.x; ++x) {
-                ABlock* neoBlock = bg.CreateBlock(0, *ressourcesManager);
-                neoBlock->setPosition((float)(x * 32), (float)(y * 32));
+                ABlock* neoBlock = bg.CreateBlock(0, *ressourcesManager, sf::Vector2f((float)(x * 32), (float)(y * 32)));
 
                 b.insert(b.end(), neoBlock);
             }
             this->tileMap.insert(y == 0 ? this->tileMap.begin() : this->tileMap.end(), b);
         } else {
-            this->tileMap[y].insert(this->tileMap[y].begin(), bg.CreateBlock(0, *ressourcesManager));
-            this->tileMap[y].insert(this->tileMap[y].end(), bg.CreateBlock(0, *ressourcesManager));
+            this->tileMap[y].insert(this->tileMap[y].begin(), bg.CreateBlock(0, *ressourcesManager, sf::Vector2f()));
+            this->tileMap[y].insert(this->tileMap[y].end(), bg.CreateBlock(0, *ressourcesManager, sf::Vector2f()));
             this->tileMap[y][0]->setPosition((float)(0), (float)(y * 32));
             this->tileMap[y][this->tileMap[y].size() - 1]->setPosition((float)((this->tileMap[y].size() - 1) * 32), (float)(y * 32));
         }
@@ -98,21 +99,25 @@ void Map::loadMap()
     
 }
 
-void Map::initPlayerOnBlock(const ABlock* block)
+void Map::initPlayerOnBlock(ABlock* block)
 {
     this->initPlayerPos = block->getPosition();
     ++this->initPlayerPos.y;
 }
 
-void Map::initDiamondOnBlock(const ABlock* block)
+void Map::initDiamondOnBlock(ABlock* block)
 {
     this->initDiamondsPos.push_back(sf::Vector2f(block->getPosition()));
 }
 
-void Map::initEntitiesPositions(const char& c, const ABlock* block)
+void Map::registerSpawner(ABlock* block)
 {
-    std::map<char, EntityPositionInitializer>::iterator pos;
-    pos = this->initializersMap.find(c);
+    this->spawners.push_back(dynamic_cast<PufferfishSpawnerBlock*>(block));
+}
+
+void Map::initEntitiesPositions(const char& c, ABlock* block)
+{
+    auto pos = this->initializersMap.find(c);
     if (pos != initializersMap.end()) {
         (this->*pos->second)(block);
     }

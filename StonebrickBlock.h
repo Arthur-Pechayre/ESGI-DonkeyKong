@@ -12,6 +12,6 @@ private:
     RessourcesManager::Tids randomizeTexture();
 
 public:
-    StonebrickBlock(const RessourcesManager&);
+    StonebrickBlock(const RessourcesManager&, const char&, const sf::Vector2f&);
     ~StonebrickBlock();
 };

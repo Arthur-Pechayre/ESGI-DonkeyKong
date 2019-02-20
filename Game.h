@@ -30,9 +30,6 @@ private:
     bool                        isJumping;
 
 public:
-    static const float          GRAVITY;
-    static const float          FRICTION;
-
     Game(const RessourcesManager&);
 	~Game() {};
 	void run();

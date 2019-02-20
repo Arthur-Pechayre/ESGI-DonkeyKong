@@ -6,6 +6,6 @@ class AirBlock :
     public ABlock
 {
 public:
-    AirBlock(const RessourcesManager&);
+    AirBlock(const RessourcesManager&, const char&, const sf::Vector2f&);
     ~AirBlock();
 };

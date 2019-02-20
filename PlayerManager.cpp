@@ -15,7 +15,7 @@ PlayerManager::~PlayerManager()
 void PlayerManager::updateFacing()
 {
     int prevFacing = this->player.facing;
-    this->player.facing = this->player.velocity.x == 0 ? this->player.facing : this->player.velocity.x > 0 ? Player::FACING_RIGHT : Player::FACING_LEFT;
+    this->player.facing = this->player.velocity.x == 0 ? this->player.facing : this->player.velocity.x > 0 ? AEntity::FACING_RIGHT : AEntity::FACING_LEFT;
     this->player.facingChanged = prevFacing != this->player.facing;
 }
 
@@ -94,13 +94,13 @@ bool PlayerManager::canJump()
 
 void PlayerManager::applyFriction()
 {
-    this->player.velocity.x *= this->isGrounded() || this->isOnLadder() ? 0.84 : 1;
-    this->player.velocity.y *= this->isOnLadder() ? 0.75 : 1;
+    this->player.velocity.x *= this->isGrounded() || this->isOnLadder() ? FRICTION : 1;
+    this->player.velocity.y *= this->isOnLadder() ? FRICTION - 0.10 : 1;
 }
 
 void PlayerManager::applyGravity()
 {
-    this->player.velocity.y += this->isOnLadder() ? 0 : Game::GRAVITY;
+    this->player.velocity.y += this->isOnLadder() ? 0 : GRAVITY;
 }
 
 std::vector<DiamondEntity*> PlayerManager::collectDiamonds()

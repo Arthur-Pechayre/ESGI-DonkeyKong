@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "StonebrickBlock.h"
 
-StonebrickBlock::StonebrickBlock(const RessourcesManager& manager) :
-ABlock(manager, randomizeTexture())
+StonebrickBlock::StonebrickBlock(const RessourcesManager& manager, const char&, const sf::Vector2f& pos) :
+ABlock(manager, randomizeTexture(), pos)
 {
 }
 
