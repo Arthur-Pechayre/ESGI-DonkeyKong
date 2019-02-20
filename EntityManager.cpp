@@ -105,14 +105,16 @@ void EntityManager::spawnPufferfishs(const sf::Time& elapsedTime)
     for (auto s : this->spawners) {
         if (s->spawn(elapsedTime)) {
             sf::Vector2i spawnPos(
-                (round(s->getPosition().x / 32) + s->facing),
-                round(s->getPosition().y / 32)
+                s->getGlobalBounds().left / 32 + s->facing,
+                s->getGlobalBounds().top / 32
             );
+
+            printf("sx: %d, sy %d, spox: %d, sposy: %d\n", s->getGlobalBounds().left / 32, s->getGlobalBounds().top / 32, spawnPos.x, spawnPos.y);
             if (dynamic_cast<ASolidBlock*>(this->map->tileMap[spawnPos.y][spawnPos.x])) {
                 return;
             }
             PufferfishEntity* neo = new PufferfishEntity(*this->ressourcesManager);
-            neo->setPosition(spawnPos.x * 32 + 16, spawnPos.y * 32 - 16) ;
+            neo->setPosition(spawnPos.x * 32 + 16, spawnPos.y * 32 + 16) ;
             neo->facing = s->facing;
 
             this->pufferfishs.push_back(neo);
