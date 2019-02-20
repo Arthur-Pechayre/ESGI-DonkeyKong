@@ -33,18 +33,9 @@ std::vector<AEntity*> EntityManager::getEntitiesAt(int y, int x) const
 {
     std::vector<AEntity*> entities;
 
-   /* printf("[%d, %d] ?\n", x, y);
-    for (auto dr : this->diamondsMap) {
-        for (auto d : dr.second) {
-            printf("    [%d, %d] gridPos : [%d, %d]\n", dr.first, d.first, d.second->getGridPosition().x, d.second->getGridPosition().y);
-        }
-    }
-*/
     auto itx = this->diamondsMap.find(x);
-    printf("lx found : %d \n", itx != this->diamondsMap.end() ? 1 : 0);
     if (itx != this->diamondsMap.end()) {
         auto ity = itx->second.find(y);
-        printf("    cy found : %d \n", ity != itx->second.end() ? 1 : 0);
         if (ity != itx->second.end()) {
             entities.push_back(ity->second);
         }
