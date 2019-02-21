@@ -109,7 +109,6 @@ void EntityManager::spawnPufferfishs(const sf::Time& elapsedTime)
                 s->getGlobalBounds().top / 32
             );
 
-            printf("sx: %d, sy %d, spox: %d, sposy: %d\n", s->getGlobalBounds().left / 32, s->getGlobalBounds().top / 32, spawnPos.x, spawnPos.y);
             if (dynamic_cast<ASolidBlock*>(this->map->tileMap[spawnPos.y][spawnPos.x])) {
                 return;
             }

@@ -63,9 +63,9 @@ void PlayerManager::handleCollisions(const sf::Time& elapsedTime)
     auto r = this->playerSurroundings.isCollidingR<ASolidBlock>(futurePos);
 
     if (player.velocity.x > 0) {
-        player.velocity.x = !r ? player.velocity.x : abs(r->getGlobalBounds().left - this->player.right()) / elapsedTime.asSeconds();
+        player.velocity.x = !r ? player.velocity.x : 0;
     } else if (player.velocity.x < 0) {
-        player.velocity.x = !l ? player.velocity.x : -1 * abs(l->getGlobalBounds().left + l->getGlobalBounds().width - this->player.left()) / elapsedTime.asSeconds();
+        player.velocity.x = !l ? player.velocity.x : 0;
     }
     if (player.velocity.y > 0) {
         player.velocity.y = !b ? player.velocity.y : abs(b->getGlobalBounds().top - this->player.bot()) / elapsedTime.asSeconds();
@@ -100,7 +100,7 @@ void PlayerManager::applyFriction()
 
 void PlayerManager::applyGravity()
 {
-    this->player.velocity.y += this->isOnLadder() ? 0 : GRAVITY;
+    this->player.velocity.y += this->isOnLadder() || this->isGrounded() ? 0 : GRAVITY;
 }
 
 std::vector<DiamondEntity*> PlayerManager::collectDiamonds()
