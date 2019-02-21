@@ -16,6 +16,7 @@ void EntityManager::initDiamonds(const std::vector<sf::Vector2f>& diamonds)
         auto neod = new DiamondEntity(*this->ressourcesManager);
         neod->setPosition(realPos);
         neod->scale(sf::Vector2f(0.75f, 0.75f));
+        neod->move(4, 0);
 
         auto pos = neod->getGridPosition();
         this->diamondsMap[pos.x][pos.y] = neod;
