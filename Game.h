@@ -9,6 +9,13 @@
 
 class Game
 {
+public:
+    enum Status{
+        End,
+        Restart,
+        Next
+    };
+
 private:
     static const sf::Time	    TimePerFrame;
     const RessourcesManager     ressourcesManager;
@@ -30,9 +37,9 @@ private:
     bool                        isJumping;
 
 public:
-    Game(const RessourcesManager&);
+    Game(const RessourcesManager&, const std::string&);
 	~Game() {};
-	void run();
+    Game::Status run();
 
 private:
     void processEvents();

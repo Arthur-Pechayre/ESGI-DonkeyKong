@@ -3,8 +3,8 @@
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
-Game::Game(const RessourcesManager& manager):
-    window(sf::VideoMode(1920, 1080), "Donkey Kong 1981", sf::Style::Close + sf::Style::Resize),
+Game::Game(const RessourcesManager& manager, const std::string& mapPath):
+    window(sf::VideoMode(1920, 1080), "Not Donkey Kong 1981", sf::Style::Close + sf::Style::Resize),
     ressourcesManager(manager),
     map(manager),
     playerManager(manager),
@@ -21,10 +21,10 @@ Game::Game(const RessourcesManager& manager):
 {
     this->window.setFramerateLimit(120);
 
-    this->map.loadMap();
+    this->map.loadMap(mapPath);
     this->playerManager.player.setPosition(this->map.initPlayerPos);
     this->entityManager.initDiamonds(this->map.initDiamondsPos);
-    this->score.init(&this->playerManager.player, &this->font, &this->window.getSize());
+    this->score.init(&this->playerManager.player, &this->font, &this->window.getSize(), this->map.initDiamondsPos.size());
     this->entityManager.spawners = this->map.spawners;
 
 	// Draw Statistic Font 
@@ -34,12 +34,11 @@ Game::Game(const RessourcesManager& manager):
     this->statisticsText.setCharacterSize(10);
 }
 
-
-void Game::run()
+Game::Status Game::run()
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	while (this->window.isOpen()) {
+	while (this->window.isOpen() && this->score.getLevelStatus() == Score::Running) {
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
 		while (timeSinceLastUpdate > TimePerFrame) {
@@ -52,6 +51,8 @@ void Game::run()
 		updateStatistics(elapsedTime);
 		render();
 	}
+
+    return !this->window.isOpen() ? Game::Status::End : this->score.getLevelStatus() == Score::Won ? Game::Status::Next : Game::Status::Restart;
 }
 
 void Game::processEvents()
@@ -95,7 +96,7 @@ void Game::updatePlayerPosition(const sf::Time& elapsedTime)
         acceleration.y += Player::SPEED;
     }
 
-    // Prevent diagonal movements from being longer
+    // Prevent diagonal movements to be x + y
     if (acceleration.x && acceleration.y) {
         acceleration /= std::sqrt(2.f);
     }
@@ -117,7 +118,7 @@ void Game::update(const sf::Time& elapsedTime)
     this->entityManager.updatePufferfishs(elapsedTime);
 
     auto diams = this->playerManager.collectDiamonds();
-    this->score.diamonds += this->entityManager.updateDiamonds(this->playerManager.collectDiamonds());
+    this->score.diamondsCollected += this->entityManager.updateDiamonds(this->playerManager.collectDiamonds());
 }
 
 void Game::render()

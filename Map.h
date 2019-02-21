@@ -27,6 +27,6 @@ private:
 public:
     Map(const RessourcesManager&);
     ~Map() {};
-    void loadMap();
+    void loadMap(const std::string&);
     void draw(sf::RenderWindow&);
 };

@@ -34,7 +34,7 @@ bool PufferfishSpawnerBlock::spawn(const sf::Time& elapsedTime)
 
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::uniform_int_distribution<int> uni(0, 1);
+    std::uniform_int_distribution<int> uni(0, 2);
     
     return uni(rng) == 0;
 }

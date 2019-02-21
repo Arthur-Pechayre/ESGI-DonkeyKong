@@ -23,59 +23,26 @@ void Map::draw(sf::RenderWindow& w)
     }
 }
 
-void Map::loadMap()
+void Map::loadMap(const std::string& mapPath)
 {
-    auto bg = BlockGenerator();
-
-    std::vector<std::string> map = {
-        "   P   s        ",
-        " c  l   s       ",
-        "ssssl  s        ",
-        "    l   s       ",
-        "    l  s        ",
-        "    l   s       ",
-        "    l  s        ",
-        "    l   s       ",
-        "    l  s        ",
-        "    l   s       ",
-        "    l  s        ",
-        "    l<  s     > ",
-        "    lsssssssssss",
-        "    l           ",
-        "    l           ",
-        "    l           ",
-        "sssslssssssss  s",
-        "    l          <",
-        "sssslsssssssssss",
-        "    l    c      ",
-        "    l           ",
-        "    l           ",
-        " c  l           ",
-        "    l           ",
-        "    l           ",
-        "    l c  c    c ",
-        "    lssss  s ss ",
-        "    l           ",
-        "    l           ",
-        "    l           ",
-        " c cl  ss       ",
-        "ssssssssssssssss",
-    };
-
-    this->size.y = map.size();
-    for (int y = 1; y < map.size() + 1; ++y) {
+    BlockGenerator  bg;
+    std::ifstream file(mapPath);
+    std::string readedLine;
+    
+    while (std::getline(file, readedLine)) {
         std::vector<ABlock*> b;
-        
-        for (int x = 1; x < map[y - 1].size() + 1; ++x) {
-            ABlock* neoBlock = bg.CreateBlock(map[y - 1][x - 1], *ressourcesManager, sf::Vector2f((float)(x * 32), (float)(y * 32)));
+        ++this->size.y;
+        for (int x = 0; x < readedLine.size(); ++x) {
+            ABlock* neoBlock = bg.CreateBlock(readedLine[x], *ressourcesManager, sf::Vector2f((float)((x + 1) * 32), (float)((this->size.y) * 32)));
 
-            this->initEntitiesPositions(map[y - 1][x - 1], neoBlock);
+            this->initEntitiesPositions(readedLine[x], neoBlock);
             
             b.insert(b.end(), neoBlock);
-            this->size.x = this->size.x < map[y - 1].size() ? map[y - 1].size() : this->size.x;
+            this->size.x = this->size.x < readedLine.size() ? readedLine.size() : this->size.x;
         }
         this->tileMap.insert(this->tileMap.end(), b);
     }
+    file.close();
 
     this->size.y += 2;
     this->size.x += 2;

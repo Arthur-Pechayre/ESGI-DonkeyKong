@@ -1,8 +1,6 @@
 #pragma once
 
 #include "pch.h"
-#include <map>
-#include <functional>
 
 #include "ABlock.h"
 #include "StonebrickBlock.h"

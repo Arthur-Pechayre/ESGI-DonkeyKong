@@ -3,7 +3,6 @@
 #include "ABlock.h"
 #include "ASolidBlock.h"
 #include "RessourcesManager.h"
-#include <random>
 
 class StonebrickBlock : public ABlock, virtual public ASolidBlock
 {
