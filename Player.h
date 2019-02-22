@@ -5,6 +5,10 @@
 
 class Player : public AEntity
 {
+private:
+    int blinkDisplay;
+    int blinkSide;
+
 public:
     static const float  SPEED;
     static const float  JUMP_CD;
@@ -20,4 +24,5 @@ public:
     Player(const RessourcesManager&);
     ~Player();
     sf::Vector2i getGridPosition() const;
+    void draw(sf::RenderWindow&);
 };

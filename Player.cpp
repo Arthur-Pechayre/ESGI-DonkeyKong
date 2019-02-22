@@ -12,7 +12,9 @@ const float Player::DAMAGE_CD = PLAYER_DAMAGE_CD;
 Player::Player(const RessourcesManager& manager) :
     AEntity(manager, RessourcesManager::Tids::Eplayer),
     jumpCooldown(sf::Time::Zero),
-    damageCooldown(sf::Time::Zero)
+    damageCooldown(sf::Time::Zero),
+    blinkDisplay(0),
+    blinkSide(1)
 {
     this->facing = AEntity::FACING_RIGHT;
 }
@@ -24,4 +26,17 @@ Player::~Player()
 sf::Vector2i Player::getGridPosition() const
 {
     return (sf::Vector2i(round(this->left() / 32), round(this->top() / 32) + 1));
+}
+
+void Player::draw(sf::RenderWindow& w) {
+    if (this->damageCooldown > sf::Time::Zero) {
+        this->blinkSide *= abs(this->blinkDisplay) >= 15 ? -1 : 1;
+        this->blinkDisplay += this->blinkSide;
+    } else {
+        this->blinkDisplay = 0;
+    }
+    
+    if (this->blinkDisplay >= 0) {
+        AEntity::draw(w);
+    }
 }
