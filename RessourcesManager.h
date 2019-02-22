@@ -15,7 +15,8 @@ public:
         Eplayer,
         Ediamond,
         Epufferfish,
-        score_bg
+        UIscore_bg,
+        UIheart
     };
 
     const static std::map<RessourcesManager::Tids, std::string> T_PATHS;

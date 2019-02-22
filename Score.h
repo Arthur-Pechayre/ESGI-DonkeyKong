@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "Const.h"
 #include "RessourcesManager.h"
 
 class Score
@@ -23,10 +24,9 @@ public:
     sf::Vector2f        origin;
     sf::Vector2f        size;
 
-    //sf::Time          timeLeft;
-    //unsigned int      score;
-    unsigned int        diamondsCollected;
-    unsigned int        diamondsCount;
+    unsigned int            diamondsCollected;
+    unsigned int            diamondsCount;
+    std::vector<sf::Sprite> hearts;
 
 public:
     Score(const RessourcesManager&);
@@ -34,4 +34,5 @@ public:
     void            draw(sf::RenderWindow&);
     void            init(const Player*, sf::Font*, sf::Vector2u*, unsigned int);
     LevelStatus     getLevelStatus();
+    void            removeLifePoint();
 };

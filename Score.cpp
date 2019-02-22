@@ -4,10 +4,15 @@
 
 Score::Score(const RessourcesManager& manager) :
     txt(),
-    bg()
+    bg(),
+    hearts(LIFE_POINTS)
 {
-    bg.setTexture(manager.T_MAP.at(RessourcesManager::Tids::score_bg));
+    bg.setTexture(manager.T_MAP.at(RessourcesManager::Tids::UIscore_bg));
     bg.setColor(sf::Color(255, 255, 255, 190));
+
+    for (int i = 0; i < this->hearts.size(); ++i) {
+        this->hearts[i].setTexture(manager.T_MAP.at(RessourcesManager::Tids::UIheart));
+    }
 }
 
 void Score::init(const Player* player, sf::Font* font, sf::Vector2u* windowSize, unsigned int diamondsCount)
@@ -20,7 +25,7 @@ void Score::init(const Player* player, sf::Font* font, sf::Vector2u* windowSize,
     this->size = sf::Vector2f(windowSize->x - this->origin.x, windowSize->y / 3);
 
     this->txt.setFont(*this->font);
-    this->txt.setPosition(this->origin.x + this->size.x / 8, this->size.y * 0.1);
+    this->txt.setPosition(this->origin.x + this->size.x / 6, this->size.y * 0.18);
     this->txt.setCharacterSize(25);
     this->txt.setFillColor(sf::Color(230, 160, 0));
     this->txt.setOutlineThickness(1);
@@ -30,6 +35,12 @@ void Score::init(const Player* player, sf::Font* font, sf::Vector2u* windowSize,
 
     this->bg.setPosition(this->origin);
     this->bg.scale(scale);
+
+    sf::Vector2f heartsBasePos(this->origin.x + this->size.x / 6, this->size.y * 0.65);
+    for (int i = 0; i < this->hearts.size(); ++i) {
+        this->hearts[i].setPosition(heartsBasePos.x, heartsBasePos.y);
+        heartsBasePos.x += 32 + 8;
+    }
 }
 
 void Score::draw(sf::RenderWindow& w)
@@ -44,13 +55,25 @@ void Score::draw(sf::RenderWindow& w)
 
     w.draw(this->bg);
     w.draw(this->txt);
+    for (auto h : this->hearts) {
+        w.draw(h);
+    }
 }
 
 Score::LevelStatus Score::getLevelStatus()
 {
+    if (this->hearts.size() == 0) {
+        return LevelStatus::Lost;
+    }
+
     if (diamondsCollected == diamondsCount) {
         return LevelStatus::Won;
     }
 
     return LevelStatus::Running;
+}
+
+void Score::removeLifePoint()
+{
+    this->hearts.erase(this->hearts.end() - 1);
 }

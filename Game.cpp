@@ -27,7 +27,7 @@ Game::Game(const RessourcesManager& manager, const std::string& mapPath):
     this->score.init(&this->playerManager.player, &this->font, &this->window.getSize(), this->map.initDiamondsPos.size());
     this->entityManager.spawners = this->map.spawners;
 
-	// Draw Statistic Font 
+    // Draw Statistic Font 
     this->font.loadFromFile("Media/Sansation.ttf");
     this->statisticsText.setFont(this->font);
     this->statisticsText.setPosition(5.f, 5.f);
@@ -36,43 +36,43 @@ Game::Game(const RessourcesManager& manager, const std::string& mapPath):
 
 Game::Status Game::run()
 {
-	sf::Clock clock;
-	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	while (this->window.isOpen() && this->score.getLevelStatus() == Score::Running) {
-		sf::Time elapsedTime = clock.restart();
-		timeSinceLastUpdate += elapsedTime;
-		while (timeSinceLastUpdate > TimePerFrame) {
-			timeSinceLastUpdate -= TimePerFrame;
+    sf::Clock clock;
+    sf::Time timeSinceLastUpdate = sf::Time::Zero;
+    while (this->window.isOpen() && this->score.getLevelStatus() == Score::Running) {
+        sf::Time elapsedTime = clock.restart();
+        timeSinceLastUpdate += elapsedTime;
+        while (timeSinceLastUpdate > TimePerFrame) {
+            timeSinceLastUpdate -= TimePerFrame;
 
-			processEvents();
-			update(TimePerFrame);
-		}
+            processEvents();
+            update(TimePerFrame);
+        }
 
-		updateStatistics(elapsedTime);
-		render();
-	}
+        updateStatistics(elapsedTime);
+        render();
+    }
 
     return !this->window.isOpen() ? Game::Status::End : this->score.getLevelStatus() == Score::Won ? Game::Status::Next : Game::Status::Restart;
 }
 
 void Game::processEvents()
 {
-	sf::Event event;
-	while (this->window.pollEvent(event)) {
-		switch (event.type) {
-		case sf::Event::KeyPressed:
-			handlePlayerInput(event.key.code, true);
-			break;
+    sf::Event event;
+    while (this->window.pollEvent(event)) {
+        switch (event.type) {
+        case sf::Event::KeyPressed:
+            handlePlayerInput(event.key.code, true);
+            break;
 
-		case sf::Event::KeyReleased:
-			handlePlayerInput(event.key.code, false);
-			break;
+        case sf::Event::KeyReleased:
+            handlePlayerInput(event.key.code, false);
+            break;
 
-		case sf::Event::Closed:
+        case sf::Event::Closed:
             this->window.close();
-			break;
-		}
-	}
+            break;
+        }
+    }
 }
 
 void Game::updatePlayerPosition(const sf::Time& elapsedTime)
@@ -81,9 +81,9 @@ void Game::updatePlayerPosition(const sf::Time& elapsedTime)
 
     sf::Vector2f acceleration(
         this->isMovingLeft && this->isMovingRight ? 0 :
-            this->isMovingLeft ? -Player::SPEED :
-            this->isMovingRight ? Player::SPEED : 
-            0,
+        this->isMovingLeft ? -Player::SPEED :
+        this->isMovingRight ? Player::SPEED :
+        0,
         0.f
     );
     ABlock* onLadder = this->playerManager.isOnLadder();
@@ -118,8 +118,10 @@ void Game::update(const sf::Time& elapsedTime)
     this->entityManager.updatePufferfishs(elapsedTime);
 
     auto diams = this->playerManager.collectDiamonds();
-    
-    this->playerManager.isTakingDamages(elapsedTime);
+
+    if (this->playerManager.isTakingDamages(elapsedTime)) {
+        this->score.removeLifePoint();
+    }
     
     this->score.diamondsCollected += this->entityManager.updateDiamonds(this->playerManager.collectDiamonds());
 }

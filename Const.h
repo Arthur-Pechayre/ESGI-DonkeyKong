@@ -1,5 +1,7 @@
 #pragma once
 
+#define LIFE_POINTS 4
+
 #define GRAVITY 20
 #define FRICTION 0.85f
 
