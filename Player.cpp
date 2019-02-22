@@ -36,7 +36,7 @@ void Player::draw(sf::RenderWindow& w) {
         this->blinkDisplay = 0;
     }
     
-    if (this->blinkDisplay >= 0) {
-        AEntity::draw(w);
-    }
+    this->setColor(this->blinkDisplay >= 0 ? sf::Color(255, 255, 255, 255) : sf::Color(255, 100, 100, 160));
+
+    AEntity::draw(w);
 }
