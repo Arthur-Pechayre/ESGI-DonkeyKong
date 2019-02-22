@@ -107,3 +107,19 @@ std::vector<DiamondEntity*> PlayerManager::collectDiamonds()
 {
     return this->playerSurroundings.touchingEntities<DiamondEntity>(this->player.getGlobalBounds());
 }
+
+bool  PlayerManager::isTakingDamages(const sf::Time& elapsedTime)
+{
+    if (this->player.damageCooldown > sf::Time::Zero) {
+        this->player.damageCooldown -= elapsedTime;
+
+        return false;
+    }
+    if (this->playerSurroundings.touchingEntities<PufferfishEntity>(this->player.getGlobalBounds()).size() != 0) {
+        this->player.damageCooldown = sf::seconds(Player::DAMAGE_CD);
+
+        return true;
+    } 
+
+    return false;
+}

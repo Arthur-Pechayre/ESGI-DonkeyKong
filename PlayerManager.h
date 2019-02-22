@@ -19,6 +19,7 @@ public:
     void                        update(const Map&, const EntityManager&);
     void                        move(sf::Vector2f&, const sf::Time&, bool);
     std::vector<DiamondEntity*> collectDiamonds();
+    bool                        isTakingDamages(const sf::Time&);
     ABlock*                     isOnLadder();
     ABlock*                     isGrounded();
     bool                        canJump();

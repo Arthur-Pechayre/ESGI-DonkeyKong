@@ -14,12 +14,12 @@ public:
     typedef std::map<int, DiamondEntityMapEntry>    DiamondEntityMap;
 
     std::vector<PufferfishSpawnerBlock*>    spawners;
+    std::vector<PufferfishEntity*>          pufferfishs;
 
 private:
     const RessourcesManager*                ressourcesManager;
     const Map*                              map;
     DiamondEntityMap                        diamondsMap;
-    std::vector<PufferfishEntity*>          pufferfishs;
     unsigned int                            diamondsCount;
 
 public:

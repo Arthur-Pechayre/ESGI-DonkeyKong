@@ -118,6 +118,9 @@ void Game::update(const sf::Time& elapsedTime)
     this->entityManager.updatePufferfishs(elapsedTime);
 
     auto diams = this->playerManager.collectDiamonds();
+    
+        printf("%s\n", this->playerManager.isTakingDamages(elapsedTime) ? "Aie" : "Pas mal");
+    
     this->score.diamondsCollected += this->entityManager.updateDiamonds(this->playerManager.collectDiamonds());
 }
 

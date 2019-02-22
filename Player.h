@@ -11,8 +11,10 @@ public:
     static const int    JUMP_FORCE;
     static const float  MAX_X_SPEED;
     static const float  MAX_Y_SPEED;
+    static const float  DAMAGE_CD;
 
     sf::Time            jumpCooldown;
+    sf::Time            damageCooldown;
 
 public:
     Player(const RessourcesManager&);

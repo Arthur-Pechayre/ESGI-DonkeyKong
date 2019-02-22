@@ -25,7 +25,15 @@ public:
         Head,
         Legs
     };
-    std::vector<ABlock*>                 blocks;
+
+    enum EntityPos
+    {
+        EHead,
+        ELegs,
+        EPufferfishs
+    };
+
+    std::vector<ABlock*>           blocks;
     std::vector<std::vector<AEntity*>>   entities;
 
 private:
@@ -43,7 +51,7 @@ private:
 public:
     PlayerSurroundings() :
         blocks(12, nullptr),
-        entities(12)
+        entities(3)
     {
     };
 
@@ -72,11 +80,12 @@ public:
         this->blocks[Pos::MiddleTopR] = head < 0 || right > map.size.x ? nullptr : map.tileMap[head][right];
         this->blocks[Pos::TopL] = top < 0 || left < 0 ? nullptr : map.tileMap[top][left];
         this->blocks[Pos::Top] = top < 0 ? nullptr : map.tileMap[top][x];
-        this->blocks[Pos::TopR] = top < 0 || right > map.size.x ? nullptr : map.tileMap[top][right];    
+        this->blocks[Pos::TopR] = top < 0 || right > map.size.x ? nullptr : map.tileMap[top][right];
 
         // Update entities
-        this->entities[Pos::Legs] = e.getEntitiesAt(y, x);
-        this->entities[Pos::Head] = e.getEntitiesAt(head, x);
+        this->entities[EntityPos::ELegs] = e.getEntitiesAt(y, x);
+        this->entities[EntityPos::EHead] = e.getEntitiesAt(head, x);
+        this->entities[EntityPos::EPufferfishs].assign(e.pufferfishs.begin(), e.pufferfishs.end());
     };
 
     template <typename Block>
@@ -138,7 +147,7 @@ public:
     {
         std::vector<Entity*> res;
 
-        for (auto i : { Pos::Head, Pos::Legs }) {
+        for (auto i : { EntityPos::EHead, EntityPos::ELegs }) {
             for (auto e : this->entities[i]) {
                 if (e->getGlobalBounds().intersects(hb)) {
                     Entity* entityColliding = dynamic_cast<Entity*>(e);
@@ -146,6 +155,22 @@ public:
                         res.push_back(entityColliding);
                     }
                 }
+            }
+        }
+
+        return res;
+    };
+
+    template <>
+    std::vector<PufferfishEntity*> touchingEntities<PufferfishEntity>(const sf::FloatRect& hb)
+    {
+        std::vector<PufferfishEntity*> res;
+    
+        for (auto p : this->entities[EntityPos::EPufferfishs]) {
+            if (p->getGlobalBounds().intersects(hb)) {
+                res.push_back((PufferfishEntity*) p);
+
+                return res;
             }
         }
 
