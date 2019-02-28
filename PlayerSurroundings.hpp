@@ -33,14 +33,14 @@ public:
         EPufferfishs
     };
 
-    std::vector<ABlock*>           blocks;
-    std::vector<std::vector<AEntity*>>   entities;
+    std::vector<ABlock_shrdp>               blocks;
+    std::vector<std::vector<AEntity*>>      entities;
 
 private:
     template <typename Block>
-    ABlock* isColliding(const sf::FloatRect& hb, const std::initializer_list<Pos>& addresses) {
+    ABlock_shrdp isColliding(const sf::FloatRect& hb, const std::initializer_list<Pos>& addresses) {
         for (auto i : addresses) {
-            if (this->blocks[i] && this->blocks[i]->getGlobalBounds().intersects(hb) && dynamic_cast<Block*>(this->blocks[i])) {
+            if (this->blocks[i] && this->blocks[i]->getGlobalBounds().intersects(hb) && std::dynamic_pointer_cast<Block>(this->blocks[i])) {
                 return this->blocks[i];
             }
         }
@@ -89,7 +89,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isCollidingL(const sf::FloatRect& playerHitBox)
+    ABlock_shrdp isCollidingL(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
         hb.top += 2;
@@ -101,7 +101,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isCollidingR(const sf::FloatRect& playerHitBox)
+    ABlock_shrdp isCollidingR(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
         hb.top += 2;
@@ -113,7 +113,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isCollidingT(const sf::FloatRect& playerHitBox)
+    ABlock_shrdp isCollidingT(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
         hb.top -= 1;
@@ -125,7 +125,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isCollidingB(const sf::FloatRect& playerHitBox)
+    ABlock_shrdp isCollidingB(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
         hb.top -= 1;
@@ -137,7 +137,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isOn(const sf::FloatRect& hb)
+    ABlock_shrdp isOn(const sf::FloatRect& hb)
     {
         return this->isColliding<Block>(hb, { Pos::Head, Pos::Legs });
     };

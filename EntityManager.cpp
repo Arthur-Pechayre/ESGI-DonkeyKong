@@ -110,7 +110,7 @@ void EntityManager::spawnPufferfishs(const sf::Time& elapsedTime)
                 s->getGlobalBounds().top / 32
             );
 
-            if (dynamic_cast<ASolidBlock*>(this->map->tileMap[spawnPos.y][spawnPos.x])) {
+            if (std::dynamic_pointer_cast<ASolidBlock>(this->map->tileMap[spawnPos.y][spawnPos.x])) {
                 return;
             }
             PufferfishEntity* neo = new PufferfishEntity(*this->ressourcesManager);
@@ -129,11 +129,11 @@ void EntityManager::updateFacing(AEntity& e)
     e.facingChanged = prevFacing != e.facing;
 }
 
-ABlock* EntityManager::isCollidingInBlock(AEntity& e)
+ABlock_shrdp EntityManager::isCollidingInBlock(AEntity& e)
 {
     auto pos = e.getGridPosition();
 
-    return dynamic_cast<ASolidBlock*>(this->map->tileMap[pos.y][pos.x]) ? this->map->tileMap[pos.y][pos.x] : nullptr;
+    return std::dynamic_pointer_cast<ASolidBlock>(this->map->tileMap[pos.y][pos.x]) ? this->map->tileMap[pos.y][pos.x] : nullptr;
 };
 
 bool EntityManager::isGrounded(AEntity& e)
@@ -142,7 +142,7 @@ bool EntityManager::isGrounded(AEntity& e)
     int x1 = round((e.left() + 16) / 32.f);
     int x2 = round((e.right() - 16) / 32.f);
 
-    return dynamic_cast<ASolidBlock*>(this->map->tileMap[y][x1]) || dynamic_cast<ASolidBlock*>(this->map->tileMap[y][x2]);
+    return std::dynamic_pointer_cast<ASolidBlock>(this->map->tileMap[y][x1]) || std::dynamic_pointer_cast<ASolidBlock>(this->map->tileMap[y][x2]);
 }
 
 void EntityManager::applyFriction(AEntity& e)

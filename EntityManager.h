@@ -2,6 +2,7 @@
 
 #include "RessourcesManager.h"
 #include "AEntity.h"
+#include "ABlock.h"
 #include "Map.h"
 #include "DiamondEntity.h"
 #include "PufferfishEntity.h"
@@ -13,8 +14,8 @@ public:
     typedef std::map<int, DiamondEntity*>           DiamondEntityMapEntry;
     typedef std::map<int, DiamondEntityMapEntry>    DiamondEntityMap;
 
-    std::vector<PufferfishSpawnerBlock*>    spawners;
-    std::vector<PufferfishEntity*>          pufferfishs;
+    std::vector<std::shared_ptr<PufferfishSpawnerBlock>>    spawners;
+    std::vector<PufferfishEntity*>                          pufferfishs;
 
 private:
     const RessourcesManager*                ressourcesManager;
@@ -35,6 +36,6 @@ public:
     void                    applyFriction(AEntity&);
     void                    applyGravity(AEntity&);
     bool                    isGrounded(AEntity &);
-    ABlock*                 isCollidingInBlock(AEntity &);
+    ABlock_shrdp            isCollidingInBlock(AEntity &);
 };
 

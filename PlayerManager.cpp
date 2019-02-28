@@ -75,12 +75,12 @@ void PlayerManager::handleCollisions(const sf::Time& elapsedTime)
     }
 }
 
-ABlock* PlayerManager::isOnLadder()
+ABlock_shrdp PlayerManager::isOnLadder()
 {
     return this->playerSurroundings.isOn<LadderBlock>(this->player.getGlobalBounds());
 }
 
-ABlock* PlayerManager::isGrounded()
+ABlock_shrdp PlayerManager::isGrounded()
 {
     return this->playerSurroundings.isCollidingB<ASolidBlock>(this->player.getGlobalBounds());
 }
