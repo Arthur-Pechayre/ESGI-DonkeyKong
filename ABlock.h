@@ -2,6 +2,9 @@
 
 #include "RessourcesManager.h"
 
+class ABlock;
+typedef std::shared_ptr<ABlock> ABlock_;
+
 class ABlock : public sf::Sprite
 {
 private:

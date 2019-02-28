@@ -30,10 +30,10 @@ void Map::loadMap(const std::string& mapPath)
     std::string readedLine;
     
     while (std::getline(file, readedLine)) {
-        std::vector<ABlock*> b;
+        std::vector<ABlock_> b;
         ++this->size.y;
         for (int x = 0; x < readedLine.size(); ++x) {
-            ABlock* neoBlock = bg.CreateBlock(readedLine[x], *ressourcesManager, sf::Vector2f((float)((x + 1) * 32), (float)((this->size.y) * 32)));
+            ABlock_ neoBlock = bg.CreateBlock(readedLine[x], *ressourcesManager, sf::Vector2f((float)((x + 1) * 32), (float)((this->size.y) * 32)));
 
             this->initEntitiesPositions(readedLine[x], neoBlock);
             
@@ -48,9 +48,9 @@ void Map::loadMap(const std::string& mapPath)
     this->size.x += 2;
     for (int y = 0; y < this->size.y; ++y) {
         if (y == 0 || y == this->size.y - 1) {
-            std::vector<ABlock*> b;
+            std::vector<ABlock_> b;
             for (int x = 0; x < this->size.x; ++x) {
-                ABlock* neoBlock = bg.CreateBlock(0, *ressourcesManager, sf::Vector2f((float)(x * 32), (float)(y * 32)));
+                ABlock_ neoBlock = bg.CreateBlock(0, *ressourcesManager, sf::Vector2f((float)(x * 32), (float)(y * 32)));
 
                 b.insert(b.end(), neoBlock);
             }
@@ -66,23 +66,23 @@ void Map::loadMap(const std::string& mapPath)
     
 }
 
-void Map::initPlayerOnBlock(ABlock* block)
+void Map::initPlayerOnBlock(ABlock_ block)
 {
     this->initPlayerPos = block->getPosition();
     ++this->initPlayerPos.y;
 }
 
-void Map::initDiamondOnBlock(ABlock* block)
+void Map::initDiamondOnBlock(ABlock_ block)
 {
     this->initDiamondsPos.push_back(sf::Vector2f(block->getPosition()));
 }
 
-void Map::registerSpawner(ABlock* block)
+void Map::registerSpawner(ABlock_ block)
 {
-    this->spawners.push_back(dynamic_cast<PufferfishSpawnerBlock*>(block));
+    this->spawners.push_back(std::dynamic_pointer_cast<PufferfishSpawnerBlock>(block));
 }
 
-void Map::initEntitiesPositions(const char& c, ABlock* block)
+void Map::initEntitiesPositions(const char& c, ABlock_ block)
 {
     auto pos = this->initializersMap.find(c);
     if (pos != initializersMap.end()) {

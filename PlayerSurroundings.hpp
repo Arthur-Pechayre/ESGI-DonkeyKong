@@ -33,14 +33,14 @@ public:
         EPufferfishs
     };
 
-    std::vector<ABlock*>           blocks;
-    std::vector<std::vector<AEntity*>>   entities;
+    std::vector<ABlock_>               blocks;
+    std::vector<std::vector<AEntity_>>      entities;
 
 private:
     template <typename Block>
-    ABlock* isColliding(const sf::FloatRect& hb, const std::initializer_list<Pos>& addresses) {
+    ABlock_ isColliding(const sf::FloatRect& hb, const std::initializer_list<Pos>& addresses) {
         for (auto i : addresses) {
-            if (this->blocks[i] && this->blocks[i]->getGlobalBounds().intersects(hb) && dynamic_cast<Block*>(this->blocks[i])) {
+            if (this->blocks[i] && this->blocks[i]->getGlobalBounds().intersects(hb) && std::dynamic_pointer_cast<Block>(this->blocks[i])) {
                 return this->blocks[i];
             }
         }
@@ -89,7 +89,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isCollidingL(const sf::FloatRect& playerHitBox)
+    ABlock_ isCollidingL(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
         hb.top += 2;
@@ -101,7 +101,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isCollidingR(const sf::FloatRect& playerHitBox)
+    ABlock_ isCollidingR(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
         hb.top += 2;
@@ -113,7 +113,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isCollidingT(const sf::FloatRect& playerHitBox)
+    ABlock_ isCollidingT(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
         hb.top -= 1;
@@ -125,7 +125,7 @@ public:
     };
 
     template <typename Block>
-    ABlock* isCollidingB(const sf::FloatRect& playerHitBox)
+    ABlock_ isCollidingB(const sf::FloatRect& playerHitBox)
     {
         sf::FloatRect hb(playerHitBox);
         hb.top -= 1;
@@ -137,20 +137,20 @@ public:
     };
 
     template <typename Block>
-    ABlock* isOn(const sf::FloatRect& hb)
+    ABlock_ isOn(const sf::FloatRect& hb)
     {
         return this->isColliding<Block>(hb, { Pos::Head, Pos::Legs });
     };
 
     template <typename Entity>
-    std::vector<Entity*> touchingEntities(const sf::FloatRect& hb)
+    std::vector<std::shared_ptr<Entity>> touchingEntities(const sf::FloatRect& hb)
     {
-        std::vector<Entity*> res;
+        std::vector<std::shared_ptr<Entity>> res;
 
         for (auto i : { EntityPos::EHead, EntityPos::ELegs }) {
             for (auto e : this->entities[i]) {
                 if (e->getGlobalBounds().intersects(hb)) {
-                    Entity* entityColliding = dynamic_cast<Entity*>(e);
+                    auto entityColliding = std::dynamic_pointer_cast<Entity>(e);
                     if (entityColliding) {
                         res.push_back(entityColliding);
                     }
@@ -162,13 +162,13 @@ public:
     };
 
     template <>
-    std::vector<PufferfishEntity*> touchingEntities<PufferfishEntity>(const sf::FloatRect& hb)
+    std::vector<std::shared_ptr<PufferfishEntity>> touchingEntities<PufferfishEntity>(const sf::FloatRect& hb)
     {
-        std::vector<PufferfishEntity*> res;
+        std::vector<std::shared_ptr<PufferfishEntity>> res;
     
         for (auto p : this->entities[EntityPos::EPufferfishs]) {
             if (p->getGlobalBounds().intersects(hb)) {
-                res.push_back((PufferfishEntity*) p);
+                res.push_back(std::dynamic_pointer_cast<PufferfishEntity>(p));
 
                 return res;
             }

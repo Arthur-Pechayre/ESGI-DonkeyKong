@@ -2,6 +2,7 @@
 
 #include "RessourcesManager.h"
 #include "AEntity.h"
+#include "ABlock.h"
 #include "Map.h"
 #include "DiamondEntity.h"
 #include "PufferfishEntity.h"
@@ -10,11 +11,11 @@
 class EntityManager
 {
 public:
-    typedef std::map<int, DiamondEntity*>           DiamondEntityMapEntry;
-    typedef std::map<int, DiamondEntityMapEntry>    DiamondEntityMap;
+    typedef std::map<int, std::shared_ptr<DiamondEntity>>   DiamondEntityMapEntry;
+    typedef std::map<int, DiamondEntityMapEntry>            DiamondEntityMap;
 
-    std::vector<PufferfishSpawnerBlock*>    spawners;
-    std::vector<PufferfishEntity*>          pufferfishs;
+    std::vector<std::shared_ptr<PufferfishSpawnerBlock>>    spawners;
+    std::vector<std::shared_ptr<PufferfishEntity>>          pufferfishs;
 
 private:
     const RessourcesManager*                ressourcesManager;
@@ -26,15 +27,15 @@ public:
     EntityManager(const RessourcesManager&, const Map&);
     ~EntityManager() {};
     void                    draw(sf::RenderWindow&);
-    std::vector<AEntity*>   getEntitiesAt(int y, int x) const;
+    std::vector<AEntity_>   getEntitiesAt(int y, int x) const;
     void                    initDiamonds(const std::vector<sf::Vector2f>&);
-    int                     updateDiamonds(std::vector<DiamondEntity*>);
+    int                     updateDiamonds(std::vector<std::shared_ptr<DiamondEntity>>);
     void                    updatePufferfishs(const sf::Time&);
     void                    spawnPufferfishs(const sf::Time&);
     void                    updateFacing(AEntity&);
     void                    applyFriction(AEntity&);
     void                    applyGravity(AEntity&);
-    bool                    isGrounded(AEntity &);
-    ABlock*                 isCollidingInBlock(AEntity &);
+    bool                    isGrounded(AEntity&);
+    ABlock_                 isCollidingInBlock(AEntity&);
 };
 

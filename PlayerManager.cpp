@@ -75,12 +75,12 @@ void PlayerManager::handleCollisions(const sf::Time& elapsedTime)
     }
 }
 
-ABlock* PlayerManager::isOnLadder()
+ABlock_ PlayerManager::isOnLadder()
 {
     return this->playerSurroundings.isOn<LadderBlock>(this->player.getGlobalBounds());
 }
 
-ABlock* PlayerManager::isGrounded()
+ABlock_ PlayerManager::isGrounded()
 {
     return this->playerSurroundings.isCollidingB<ASolidBlock>(this->player.getGlobalBounds());
 }
@@ -103,7 +103,7 @@ void PlayerManager::applyGravity()
     this->player.velocity.y += this->isOnLadder() || this->isGrounded() ? 0 : GRAVITY;
 }
 
-std::vector<DiamondEntity*> PlayerManager::collectDiamonds()
+std::vector<std::shared_ptr<DiamondEntity>> PlayerManager::collectDiamonds()
 {
     return this->playerSurroundings.touchingEntities<DiamondEntity>(this->player.getGlobalBounds());
 }
