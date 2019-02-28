@@ -75,7 +75,10 @@ int EntityManager::updateDiamonds(std::vector<std::shared_ptr<DiamondEntity>> di
 
 void EntityManager::updatePufferfishs(const sf::Time& elapsedTime)
 {
-    for (auto p : this->pufferfishs) {
+    std::vector<std::vector<std::shared_ptr<PufferfishEntity>>::iterator> toRemove;
+
+    for (auto it = this->pufferfishs.begin(); it != this->pufferfishs.end(); ++it) {
+        auto p = *it;
         p->velocity.x = this->isGrounded(*p) ? p->facing * PufferfishEntity::SPEED + p->velocity.x : 0;
         this->applyGravity(*p);
         this->applyFriction(*p);
@@ -91,13 +94,20 @@ void EntityManager::updatePufferfishs(const sf::Time& elapsedTime)
         auto b = isCollidingInBlock(*p);
         if (b) {
             if (p->hitsRemaining == 0) {
-                this->pufferfishs.erase(std::remove(this->pufferfishs.begin(), this->pufferfishs.end(), p), this->pufferfishs.end());
+                p.reset();
+                toRemove.push_back(it);
+
+                continue;
             }
             p->move(abs(p->getPosition().x - b->getPosition().x) * p->velocity.x > 0 ? -1 : 1, 0);
             p->velocity.x *= -1;
             --p->hitsRemaining;
         }
         this->updateFacing(*p);
+    }
+
+    for (auto trIt : toRemove) {
+        this->pufferfishs.erase(trIt);
     }
 }
 
