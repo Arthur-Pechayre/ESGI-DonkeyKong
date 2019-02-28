@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath);$(ProjectDir)\..\SFML\Include</IncludePath>
-    <LibraryPath>$(LibraryPath);$(ProjectDir)\..\SFML\Lib</LibraryPath>
+    <IncludePath>$(IncludePath);$(ProjectDir)\SFML\Include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(ProjectDir)\SFML\Lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
