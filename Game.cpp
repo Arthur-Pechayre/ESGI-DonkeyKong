@@ -86,7 +86,7 @@ void Game::updatePlayerPosition(const sf::Time& elapsedTime)
         0,
         0.f
     );
-    ABlock_shrdp onLadder = this->playerManager.isOnLadder();
+    ABlock_ onLadder = this->playerManager.isOnLadder();
     bool jumping = false;
 
     if (this->isMovingUp && onLadder) {

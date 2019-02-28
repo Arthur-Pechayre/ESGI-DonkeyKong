@@ -13,7 +13,7 @@ void EntityManager::initDiamonds(const std::vector<sf::Vector2f>& diamonds)
 {
     for (auto realPos : diamonds) {
         ++this->diamondsCount;
-        auto neod = new DiamondEntity(*this->ressourcesManager);
+        auto neod = std::make_shared<DiamondEntity>(*this->ressourcesManager);
         neod->setPosition(realPos);
         neod->scale(sf::Vector2f(0.75f, 0.75f));
         neod->move(4, 0);
@@ -36,9 +36,9 @@ void EntityManager::draw(sf::RenderWindow& w)
     }
 }
 
-std::vector<AEntity*> EntityManager::getEntitiesAt(int y, int x) const
+std::vector<AEntity_> EntityManager::getEntitiesAt(int y, int x) const
 {
-    std::vector<AEntity*> entities;
+    std::vector<AEntity_> entities;
 
     auto itx = this->diamondsMap.find(x);
     if (itx != this->diamondsMap.end()) {
@@ -51,7 +51,7 @@ std::vector<AEntity*> EntityManager::getEntitiesAt(int y, int x) const
     return entities;
 }
 
-int EntityManager::updateDiamonds(std::vector<DiamondEntity*> dimondsCaught) {
+int EntityManager::updateDiamonds(std::vector<std::shared_ptr<DiamondEntity>> dimondsCaught) {
     int n = 0;
 
     for (auto e : dimondsCaught) {
@@ -113,7 +113,7 @@ void EntityManager::spawnPufferfishs(const sf::Time& elapsedTime)
             if (std::dynamic_pointer_cast<ASolidBlock>(this->map->tileMap[spawnPos.y][spawnPos.x])) {
                 return;
             }
-            PufferfishEntity* neo = new PufferfishEntity(*this->ressourcesManager);
+            auto neo = std::make_shared<PufferfishEntity>(*this->ressourcesManager);
             neo->setPosition(spawnPos.x * 32 + 16, spawnPos.y * 32 + 16) ;
             neo->facing = s->facing;
 
@@ -129,7 +129,7 @@ void EntityManager::updateFacing(AEntity& e)
     e.facingChanged = prevFacing != e.facing;
 }
 
-ABlock_shrdp EntityManager::isCollidingInBlock(AEntity& e)
+ABlock_ EntityManager::isCollidingInBlock(AEntity& e)
 {
     auto pos = e.getGridPosition();
 

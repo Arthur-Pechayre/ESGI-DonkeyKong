@@ -4,10 +4,9 @@
 #include "AEntity.h"
 #include "BlockGenerator.hpp"
 
-
 class Map {
-    typedef std::vector<std::vector<ABlock_shrdp>> ABlockMap;
-    typedef	void(Map::* EntityPositionInitializer) (ABlock_shrdp);
+    typedef std::vector<std::vector<ABlock_>> ABlockMap;
+    typedef	void(Map::* EntityPositionInitializer) (ABlock_);
 
 public:
     ABlockMap                                               tileMap;
@@ -19,10 +18,10 @@ public:
 private:
     const RessourcesManager*                    ressourcesManager;
     std::map<char, EntityPositionInitializer>   initializersMap;
-    void                                        initEntitiesPositions(const char&, ABlock_shrdp);
-    void                                        initPlayerOnBlock(ABlock_shrdp);
-    void                                        initDiamondOnBlock(ABlock_shrdp);
-    void                                        registerSpawner(ABlock_shrdp);
+    void                                        initEntitiesPositions(const char&, ABlock_);
+    void                                        initPlayerOnBlock(ABlock_);
+    void                                        initDiamondOnBlock(ABlock_);
+    void                                        registerSpawner(ABlock_);
 
 public:
     Map(const RessourcesManager&);

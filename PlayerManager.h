@@ -16,13 +16,13 @@ private:
 public:
     PlayerManager(const RessourcesManager&);
     ~PlayerManager();
-    void                        update(const Map&, const EntityManager&);
-    void                        move(sf::Vector2f&, const sf::Time&, bool);
-    std::vector<DiamondEntity*> collectDiamonds();
-    bool                        isTakingDamages(const sf::Time&);
-    ABlock_shrdp                isOnLadder();
-    ABlock_shrdp                isGrounded();
-    bool                        canJump();
+    void                                        update(const Map&, const EntityManager&);
+    void                                        move(sf::Vector2f&, const sf::Time&, bool);
+    std::vector<std::shared_ptr<DiamondEntity>> collectDiamonds();
+    bool                                        isTakingDamages(const sf::Time&);
+    ABlock_                                     isOnLadder();
+    ABlock_                                     isGrounded();
+    bool                                        canJump();
 
 private:
     void    updateJumpingCD(bool, const sf::Time&);

@@ -13,7 +13,7 @@ class BlockGenerator
 {
 private:
     int _errorCount = 0;
-    std::map<char, std::function<ABlock_shrdp(const RessourcesManager&, const char&, const sf::Vector2f&)>> _blocks;
+    std::map<char, std::function<ABlock_(const RessourcesManager&, const char&, const sf::Vector2f&)>> _blocks;
 
     template<typename BlockType>
     void    RegisterBlock(const char& c)
@@ -51,7 +51,7 @@ public:
         return cnt;
     }
 
-    ABlock_shrdp CreateBlock(const char& c, const RessourcesManager& manager, const sf::Vector2f& pos)
+    ABlock_ CreateBlock(const char& c, const RessourcesManager& manager, const sf::Vector2f& pos)
     {
         std::shared_ptr<ABlock> block;
         

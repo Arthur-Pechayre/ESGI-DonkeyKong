@@ -2,6 +2,9 @@
 
 #include "RessourcesManager.h"
 
+class AEntity;
+typedef std::shared_ptr<AEntity> AEntity_;
+
 class AEntity : public sf::Sprite
 {
 public:
