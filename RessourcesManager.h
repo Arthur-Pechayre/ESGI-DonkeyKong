@@ -22,6 +22,15 @@ public:
     const static std::map<RessourcesManager::Tids, std::string> T_PATHS;
     std::map<RessourcesManager::Tids, sf::Texture> T_MAP;
 
+    // Sounds
+    enum Sids
+    {
+        Diamond_pickup,
+        Player_hurt
+    };
+    const static std::map<RessourcesManager::Sids, std::string> S_PATHS;
+    std::map<RessourcesManager::Sids, sf::SoundBuffer> S_MAP;
+
     // Musics
     enum Mids
     {

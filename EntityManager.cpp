@@ -7,6 +7,7 @@ EntityManager::EntityManager(const RessourcesManager& manager, const Map& map) :
     pufferfishs(),
     diamondsMap()
 {
+    this->diamondSound.setBuffer(this->ressourcesManager->S_MAP.at(RessourcesManager::Diamond_pickup));
 }
 
 void EntityManager::initDiamonds(const std::vector<sf::Vector2f>& diamonds)
@@ -55,6 +56,7 @@ int EntityManager::updateDiamonds(std::vector<std::shared_ptr<DiamondEntity>> di
     int n = 0;
 
     for (auto e : dimondsCaught) {
+        this->diamondSound.play();
         sf::Vector2i pos = e->getGridPosition();
 
         auto itx = this->diamondsMap.find(pos.x);

@@ -7,7 +7,7 @@ DiamondEntity::DiamondEntity(const RessourcesManager& manager) :
 {
 }
 
-
 DiamondEntity::~DiamondEntity()
 {
 }
+

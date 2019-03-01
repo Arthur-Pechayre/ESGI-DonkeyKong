@@ -6,6 +6,7 @@ PlayerManager::PlayerManager(const RessourcesManager& manager) :
     player(manager),
     playerSurroundings()
 {
+    this->hurtSound.setBuffer(manager.S_MAP.at(RessourcesManager::Player_hurt));
 }
 
 PlayerManager::~PlayerManager()
@@ -117,6 +118,7 @@ bool  PlayerManager::isTakingDamages(const sf::Time& elapsedTime)
     }
     if (this->playerSurroundings.touchingEntities<PufferfishEntity>(this->player.getGlobalBounds()).size() != 0) {
         this->player.damageCooldown = sf::seconds(Player::DAMAGE_CD);
+        this->hurtSound.play();
 
         return true;
     } 

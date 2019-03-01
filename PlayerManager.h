@@ -12,6 +12,7 @@ public:
 
 private:
     PlayerSurroundings      playerSurroundings;
+    sf::Sound               hurtSound;
 
 public:
     PlayerManager(const RessourcesManager&);

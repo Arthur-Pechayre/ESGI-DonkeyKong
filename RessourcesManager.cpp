@@ -4,6 +4,7 @@
 
 #define TEXTURES_ASSETS_PATH "Media/Textures"
 #define MUSICS_ASSETS_PATH "Media/Musics"
+#define SOUNDS_ASSETS_PATH "Media/Sounds"
 
 const std::map<RessourcesManager::Tids, std::string> RessourcesManager::T_PATHS = {
     {Bstonebrick, TEXTURES_ASSETS_PATH"/Blocks/stonebrick.png"},
@@ -20,17 +21,28 @@ const std::map<RessourcesManager::Tids, std::string> RessourcesManager::T_PATHS 
     {UIheart, TEXTURES_ASSETS_PATH"/UI/heart.png"}
 };
 
+const std::map<RessourcesManager::Sids, std::string> RessourcesManager::S_PATHS = {
+    {Diamond_pickup, SOUNDS_ASSETS_PATH"/coin.ogg"},
+    {Player_hurt, SOUNDS_ASSETS_PATH"/player_hurt.ogg"}
+};
+
 const std::map<RessourcesManager::Mids, std::string> RessourcesManager::M_PATHS = {
     {Undertale, MUSICS_ASSETS_PATH"/undertale.ogg"}
 };
 
 RessourcesManager::RessourcesManager() :
-    T_MAP()
+    T_MAP(),
+    S_MAP()
 {
     for (auto texture : T_PATHS) {
         T_MAP[texture.first] = sf::Texture();
         if (texture.second != "") {
             T_MAP[texture.first].loadFromFile(texture.second);
         }
+    }
+
+    for (auto sound : S_PATHS) {
+        S_MAP[sound.first] = sf::SoundBuffer();
+        S_MAP[sound.first].loadFromFile(sound.second);
     }
 }

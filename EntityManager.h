@@ -18,10 +18,11 @@ public:
     std::vector<std::shared_ptr<PufferfishEntity>>          pufferfishs;
 
 private:
-    const RessourcesManager*                ressourcesManager;
-    const Map*                              map;
-    DiamondEntityMap                        diamondsMap;
-    unsigned int                            diamondsCount;
+    const RessourcesManager*    ressourcesManager;
+    const Map*                  map;
+    DiamondEntityMap            diamondsMap;
+    unsigned int                diamondsCount;
+    sf::Sound                   diamondSound;
 
 public:
     EntityManager(const RessourcesManager&, const Map&);
