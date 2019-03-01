@@ -3,8 +3,8 @@
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
-Game::Game(const RessourcesManager& manager, const std::string& mapPath):
-    window(sf::VideoMode(1920, 1080), "Not Donkey Kong 1981", sf::Style::Close + sf::Style::Resize),
+Game::Game(sf::RenderWindow& w, const RessourcesManager& manager, const std::string& mapPath):
+    window{w},
     ressourcesManager(manager),
     map(manager),
     playerManager(manager),

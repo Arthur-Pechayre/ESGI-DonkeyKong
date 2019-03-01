@@ -20,7 +20,7 @@ private:
     static const sf::Time	    TimePerFrame;
     const RessourcesManager     ressourcesManager;
 
-    sf::RenderWindow            window;
+    sf::RenderWindow&           window;
     PlayerManager               playerManager;
     EntityManager               entityManager;
     Map                         map;
@@ -37,7 +37,7 @@ private:
     bool                        isJumping;
 
 public:
-    Game(const RessourcesManager&, const std::string&);
+    Game(sf::RenderWindow&, const RessourcesManager&, const std::string&);
 	~Game() {};
     Game::Status run();
 

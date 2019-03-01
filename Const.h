@@ -17,3 +17,5 @@
 #define PLAYER_JUMP_CD 0.5 // In seconds
 #define PLAYER_JUMP_FORCE 2000
 #define PLAYER_DAMAGE_CD 2 // In seconds
+
+#define MAPS_PATH "C:\\Games\\NotDK\\Maps"

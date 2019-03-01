@@ -3,6 +3,7 @@
 class RessourcesManager
 {
 public:
+    // Textures 
     enum Tids
     {
         Bstonebrick,
@@ -18,9 +19,15 @@ public:
         UIscore_bg,
         UIheart
     };
-
     const static std::map<RessourcesManager::Tids, std::string> T_PATHS;
     std::map<RessourcesManager::Tids, sf::Texture> T_MAP;
+
+    // Musics
+    enum Mids
+    {
+        Undertale
+    };
+    const static std::map<RessourcesManager::Mids, std::string> M_PATHS;
 
     RessourcesManager();
 };
