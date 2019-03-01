@@ -31,6 +31,14 @@ public:
     const static std::map<RessourcesManager::Sids, std::string> S_PATHS;
     std::map<RessourcesManager::Sids, sf::SoundBuffer> S_MAP;
 
+    // Fonts
+    enum Fids
+    {
+        Sansation
+    };
+    const static std::map<RessourcesManager::Fids, std::string> F_PATHS;
+    std::map<RessourcesManager::Fids, sf::Font> F_MAP;
+
     // Musics
     enum Mids
     {

@@ -20,7 +20,7 @@ private:
 
 public:
     const Player*       player;
-    sf::Font*           font;
+    const sf::Font&     font;
     sf::Vector2f        origin;
     sf::Vector2f        size;
 
@@ -32,7 +32,7 @@ public:
     Score(const RessourcesManager&);
     ~Score() {};
     void            draw(sf::RenderWindow&);
-    void            init(const Player*, sf::Font*, sf::Vector2u*, unsigned int);
+    void            init(const Player*, sf::Vector2u*, unsigned int);
     LevelStatus     getLevelStatus();
     void            removeLifePoint();
 };

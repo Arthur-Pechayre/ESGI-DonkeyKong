@@ -26,6 +26,10 @@ const std::map<RessourcesManager::Sids, std::string> RessourcesManager::S_PATHS 
     {Player_hurt, SOUNDS_ASSETS_PATH"/player_hurt.ogg"}
 };
 
+const std::map<RessourcesManager::Fids, std::string> RessourcesManager::F_PATHS = {
+    {Sansation, "Media/Sansation.ttf"}
+};
+
 const std::map<RessourcesManager::Mids, std::string> RessourcesManager::M_PATHS = {
     {Undertale, MUSICS_ASSETS_PATH"/undertale.ogg"}
 };
@@ -44,5 +48,10 @@ RessourcesManager::RessourcesManager() :
     for (auto sound : S_PATHS) {
         S_MAP[sound.first] = sf::SoundBuffer();
         S_MAP[sound.first].loadFromFile(sound.second);
+    }
+
+    for (auto font : F_PATHS) {
+        F_MAP[font.first] = sf::Font();
+        F_MAP[font.first].loadFromFile(font.second);
     }
 }

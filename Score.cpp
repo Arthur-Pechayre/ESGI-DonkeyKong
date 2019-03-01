@@ -5,7 +5,8 @@
 Score::Score(const RessourcesManager& manager) :
     txt(),
     bg(),
-    hearts(LIFE_POINTS)
+    hearts(LIFE_POINTS),
+    font{manager.F_MAP.at(RessourcesManager::Fids::Sansation)}
 {
     bg.setTexture(manager.T_MAP.at(RessourcesManager::Tids::UIscore_bg));
     bg.setColor(sf::Color(255, 255, 255, 190));
@@ -15,16 +16,15 @@ Score::Score(const RessourcesManager& manager) :
     }
 }
 
-void Score::init(const Player* player, sf::Font* font, sf::Vector2u* windowSize, unsigned int diamondsCount)
+void Score::init(const Player* player, sf::Vector2u* windowSize, unsigned int diamondsCount)
 {
     this->diamondsCount = diamondsCount;
     this->diamondsCollected = 0;
     this->player = player;
-    this->font = font;
     this->origin = sf::Vector2f(windowSize->x * 0.75, 0);
     this->size = sf::Vector2f(windowSize->x - this->origin.x, windowSize->y / 3);
 
-    this->txt.setFont(*this->font);
+    this->txt.setFont(this->font);
     this->txt.setPosition(this->origin.x + this->size.x / 6, this->size.y * 0.18);
     this->txt.setCharacterSize(25);
     this->txt.setFillColor(sf::Color(230, 160, 0));

@@ -10,7 +10,6 @@ Game::Game(sf::RenderWindow& w, const RessourcesManager& manager, const std::str
     playerManager(manager),
     entityManager(manager, map),
     score(manager),
-    font(),
     statisticsText(),
     statisticsUpdateTime(),
     statisticsNumFrames(0),
@@ -24,12 +23,10 @@ Game::Game(sf::RenderWindow& w, const RessourcesManager& manager, const std::str
     this->map.loadMap(mapPath);
     this->playerManager.player.setPosition(this->map.initPlayerPos);
     this->entityManager.initDiamonds(this->map.initDiamondsPos);
-    this->score.init(&this->playerManager.player, &this->font, &this->window.getSize(), this->map.initDiamondsPos.size());
+    this->score.init(&this->playerManager.player, &this->window.getSize(), this->map.initDiamondsPos.size());
     this->entityManager.spawners = this->map.spawners;
 
-    // Draw Statistic Font 
-    this->font.loadFromFile("Media/Sansation.ttf");
-    this->statisticsText.setFont(this->font);
+    this->statisticsText.setFont(manager.F_MAP.at(RessourcesManager::Fids::Sansation));
     this->statisticsText.setPosition(5.f, 5.f);
     this->statisticsText.setCharacterSize(10);
 }

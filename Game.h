@@ -26,11 +26,10 @@ private:
     Map                         map;
     Score                       score;
 
-    sf::Font	                font; // Todo move in ressource manager
-    sf::Text	                statisticsText; // Todo make ui 
+    sf::Text	                statisticsText;
     sf::Time	                statisticsUpdateTime;
     std::size_t	                statisticsNumFrames;
-    bool                        isMovingUp; //To do move
+    bool                        isMovingUp;
     bool                        isMovingDown;
     bool                        isMovingRight;
     bool                        isMovingLeft;
